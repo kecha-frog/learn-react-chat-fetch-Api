@@ -1,3 +1,23 @@
-body{
-    background-color:red;
+.message-box {
+    width: 100%;
+    background-color: rgb(201, 204, 198);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.message-box__message {
+    border: 1px solid #000;
+    width: max-content;
+    padding: 15px;
+    margin-left: 10px;
+}
+
+.message-box__input {
+    font-size: 23px;
+}
+
+.message-box__button {
+    padding: 5px 10px;
+    height: 35px;
 }

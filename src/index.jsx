@@ -1,7 +1,8 @@
-/*import React from "react"
+import "./index.css"
 import ReactDom from "react-dom"
+import React from "react"
 
-class ClassExample extends React.Component {
+/*class ClassExample extends React.Component {
   render() {
     return (
       <div>
@@ -55,37 +56,34 @@ ReactDom.render(
   <MessageField messages={["test1"]} />,
   document.getElementById("root"),
 )*/
-import "./index.css"
 
 const arrayText = ["Хорошо", "Отлично"]
 
-const divMessage = document.createElement("div")
-divMessage.className = "message-box"
-
-const message = document.createElement("h3")
-message.className = "message-box__message"
-message.textContent = arrayText.join(", ")
-
-const input = document.createElement("input")
-input.className = "message-box__input"
-input.value = "Привет"
-
-const button = document.createElement("button")
-button.className = "message-box__button"
-button.type = "button"
-button.textContent = "Отправить"
-
-divMessage.append(input)
-divMessage.append(button)
-divMessage.append(message)
-document.body.append(divMessage)
-
-const addText = () => {
-  if (input.value !== "") {
-    arrayText.push(input.value)
-    input.value = null
-    message.textContent = arrayText.join(", ")
-  }
+function addText() {
+  arrayText.push("Нормально")
+  ReactDom.render(<MessageDiv />, document.getElementById("root"))
 }
 
-button.addEventListener("click", addText)
+const Messages = (props) => (
+  <h3 className="messages-box__messages">{props.text}</h3>
+)
+
+const MessageField = (props) => {
+  return props.messages.map((message, index) => (
+    <Messages text={message} key={index} />
+  ))
+}
+const Button = () => (
+  <button onClick={addText} className={"messages-box__input"} type={"button"}>
+    Отправить
+  </button>
+)
+
+const MessageDiv = () => (
+  <React.Fragment>
+    <MessageField messages={arrayText} />
+    <Button />
+  </React.Fragment>
+)
+
+ReactDom.render(<MessageDiv />, document.getElementById("root"))

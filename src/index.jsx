@@ -1,31 +1,42 @@
 import "./index.css"
 import ReactDom from "react-dom"
-import React from "react"
+import React, { createRef } from "react"
 
-let arrayText = ["Хорошо", "Отлично"]
+class Messages extends React.Component {
+  constructor(props) {
+    super(props)``
+    this.state = {
+      array: ["Хорошо", "Отлично"],
+    }
+    this.inputRef = createRef()
+  }
 
-function addText() {
-  arrayText = [...arrayText, "Нормально"]
-  ReactDom.render(<MessageDiv />, document.getElementById("root"))
+  Message = (props) => {
+    return (
+      <h4 className="messages-box__messages" onClick={this.addText}>
+        {props.text}
+      </h4>
+    )
+  }
+
+  addText = () => {
+    this.setState({ array: [...this.state.array, this.inputRef.current.value] })
+  }
+
+  render() {
+    this.MessageField = (props) => {
+      return props.messages.map((message, index) => (
+        <this.Message text={message} key={index} />
+      ))
+    }
+
+    return (
+      <>
+        <this.MessageField messages={this.state.array} />
+        <input type="text" ref={this.inputRef} />
+      </>
+    )
+  }
 }
 
-const Messages = (props) => (
-  <h4 className="messages-box__messages">{props.text}</h4>
-)
-
-const MessageField = (props) => {
-  return props.messages.map((message, index) => (
-    <Messages text={message} key={index} />
-  ))
-}
-
-const MessageDiv = () => (
-  <>
-    <MessageField messages={arrayText} />
-    <button onClick={addText} className={"messages-box__input"} type={"button"}>
-      Отправить
-    </button>
-  </>
-)
-
-ReactDom.render(<MessageDiv />, document.getElementById("root"))
+ReactDom.render(<Messages />, document.getElementById("root"))

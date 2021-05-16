@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack:///./home.js","webpack:///./index.js"],"names":["a","console","log"],"mappings":";;;;;;;AAAO,IAAMA,CAAC,QAAG,CAAH,iCAAQ,CAAf,C;;ACAP;AACA;AAGAC,OAAO,CAACC,GAAR,CAAYF,CAAZ,E","file":"app.js","sourcesContent":["export const a = 1 ?? 2","import \"./index.css\"\r\nimport {a} from \"./home\";\r\n\r\n\r\nconsole.log(a)"],"sourceRoot":""}

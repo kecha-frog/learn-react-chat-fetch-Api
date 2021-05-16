@@ -1,0 +1,23 @@
+.messages-box {
+    width: 100%;
+    background-color: rgb(201, 204, 198);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.messages-box__message {
+    border: 1px solid #000;
+    width: max-content;
+    padding: 15px;
+    margin-left: 10px;
+}
+
+.messages-box__input {
+    font-size: 23px;
+}
+
+.messages-box__button {
+    padding: 5px 10px;
+    height: 35px;
+}

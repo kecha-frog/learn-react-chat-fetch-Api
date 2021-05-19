@@ -4,9 +4,17 @@ import React, { createRef } from "react"
 export class AppClientMessenger extends React.Component {
   constructor(props) {
     super(props)
-    this.array = props.messagesList
     this.state = {
-      messagesList: this.array,
+      messagesList: [
+        {
+          user: "User2112",
+          text: "Вы кто ?",
+        },
+        {
+          user: "Robot",
+          text: "Я робот",
+        },
+      ],
     }
     this.inputValue = createRef()
   }
@@ -23,7 +31,6 @@ export class AppClientMessenger extends React.Component {
         ],
       })
     }
-    console.log(this.array)
   }
 
   componentDidUpdate() {
@@ -47,7 +54,6 @@ export class AppClientMessenger extends React.Component {
           }),
         1500,
       )
-      setTimeout(() => console.log(this.array), 5000)
     }
   }
 

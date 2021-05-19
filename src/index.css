@@ -1,23 +1,46 @@
-.messages-box {
-    width: 100%;
+.client-messenger {
+    width: 60%;
+    margin: 0 auto;
     background-color: rgb(201, 204, 198);
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 50vh;
 }
 
-.messages-box__message {
+.client-messenger__messages{
+    overflow: auto;
+    overflow-scrolling: auto;
+}
+.client-messenger__messagesBox{
+    width: 50%;
     border: 1px solid #000;
-    width: max-content;
-    padding: 15px;
-    margin-left: 10px;
+    border-radius: 25px;
+    margin-bottom: 5px;
+    right: 0;
 }
 
-.messages-box__input {
-    font-size: 23px;
+
+.client-messenger__messagesBox--robot{
+    margin: 0 0 0 auto;
 }
 
-.messages-box__button {
-    padding: 5px 10px;
-    height: 35px;
+
+.client-messenger__messageText {
+    font-size: 19px;
+    margin: 10px;
+}
+
+.client-messenger__messageUser {
+    text-align: right;
+    margin: 10px;
+}
+
+.client-messenger__input{
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.client-messenger__button{
+    width: 100%;
 }

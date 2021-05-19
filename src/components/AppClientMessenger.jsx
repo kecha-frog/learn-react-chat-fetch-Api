@@ -4,27 +4,26 @@ import React, { createRef } from "react"
 export class AppClientMessenger extends React.Component {
   constructor(props) {
     super(props)
+    this.array = props.messagesList
     this.state = {
-      messagesList: props.messagesList,
+      messagesList: this.array,
     }
     this.inputValue = createRef()
   }
 
-  updateMessage = () => {
-    setTimeout(
-      () => this.setState({ messagesList: this.props.messagesList }),
-      500,
-    )
-  }
-
   addText = () => {
     if (!/^\s*$/.test(this.inputValue.current.value)) {
-      this.props.messagesList.push({
-        user: "User2112",
-        text: this.inputValue.current.value,
+      this.setState({
+        messagesList: [
+          ...this.state.messagesList,
+          {
+            user: "User2112",
+            text: this.inputValue.current.value,
+          },
+        ],
       })
-      this.updateMessage()
     }
+    console.log(this.array)
   }
 
   componentDidUpdate() {
@@ -32,13 +31,23 @@ export class AppClientMessenger extends React.Component {
       this.state.messagesList[this.state.messagesList.length - 1].user !==
       "Robot"
     ) {
-      this.props.messagesList.push({
-        user: "Robot",
-        text: `Здравствуйте ${
-          this.state.messagesList[this.state.messagesList.length - 1].user
-        }!  Я робот,  не отвечайте мне.`,
-      })
-      this.updateMessage()
+      setTimeout(
+        () =>
+          this.setState({
+            messagesList: [
+              ...this.state.messagesList,
+              {
+                user: "Robot",
+                text: `Здравствуйте ${
+                  this.state.messagesList[this.state.messagesList.length - 1]
+                    .user
+                }!  Я робот,  не отвечайте мне.`,
+              },
+            ],
+          }),
+        1500,
+      )
+      setTimeout(() => console.log(this.array), 5000)
     }
   }
 

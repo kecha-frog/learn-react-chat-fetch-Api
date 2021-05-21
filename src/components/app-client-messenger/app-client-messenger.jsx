@@ -65,11 +65,11 @@ export class AppClientMessenger extends React.Component {
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(props, state) {
     const { messagesList } = this.state
     const lastMessageUser = messagesList[messagesList.length - 1].user
 
-    if (lastMessageUser !== "Robot") {
+    if (lastMessageUser !== "Robot" && state.messagesList !== messagesList) {
       setTimeout(
         () =>
           this.sendMessage(

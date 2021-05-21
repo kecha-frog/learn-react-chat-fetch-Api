@@ -1,5 +1,5 @@
 import "./index.css"
-import { AppClientMessenger } from "@components/AppClientMessenger"
+import { AppClientMessenger } from "@components"
 import ReactDom from "react-dom"
 import React from "react"
 

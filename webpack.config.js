@@ -43,6 +43,27 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
+        exclude: [/node_modules/, /\.module\.css$/],
+        use: [
+          isDevelopment
+            ? "style-loader"
+            : {
+                loader: MiniCssExtractPlugin.loader,
+                options: {
+                  publicPath: path.resolve(__dirname, "dist/css"),
+                },
+              },
+
+          {
+            loader: "css-loader",
+            options: {
+              sourceMap: isDevelopment,
+            },
+          },
+        ],
+      },
+      {
+        test: /\.module\.css$/,
         exclude: /node_modules/,
         use: [
           isDevelopment
@@ -58,6 +79,7 @@ module.exports = {
             loader: "css-loader",
             options: {
               sourceMap: isDevelopment,
+              modules: true,
             },
           },
         ],

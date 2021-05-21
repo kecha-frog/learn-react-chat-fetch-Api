@@ -22,32 +22,31 @@ export class AppClientMessenger extends React.Component {
   sendMessage = (author, message) => {
     const { messagesList } = this.state
 
-    if (author === "User2112") {
-      this.setState({
-        messagesList: [
-          ...messagesList,
-          {
-            user: author,
-            text: message,
-          },
-        ],
-        userInput: "",
-      })
-    } else {
-      this.setState({
-        messagesList: [
-          ...messagesList,
-          {
-            user: author,
-            text: message,
-          },
-        ],
-      })
-    }
+    this.setState({
+      messagesList: [
+        ...messagesList,
+        {
+          user: author,
+          text: message,
+        },
+      ],
+    })
   }
 
-  handleNameChange = (event) => {
-    this.setState({ userInput: event.target.value })
+  componentDidUpdate = (props, state) => {
+    const { messagesList } = this.state
+    const lastMessageUser = messagesList[messagesList.length - 1].user
+
+    if (lastMessageUser !== "Robot" && state.messagesList !== messagesList) {
+      setTimeout(
+        () =>
+          this.sendMessage(
+            "Robot",
+            `Здравствуйте ${lastMessageUser}!  Я робот,  не отвечайте мне.`,
+          ),
+        500,
+      )
+    }
   }
 
   addText = () => {
@@ -59,25 +58,9 @@ export class AppClientMessenger extends React.Component {
     }
   }
 
-  onKeyPressHandler = (event) => {
-    if (event.key === "Enter") {
+  onKeyPressHandler = ({ code }) => {
+    if (code === "Enter") {
       this.addText()
-    }
-  }
-
-  componentDidUpdate(props, state) {
-    const { messagesList } = this.state
-    const lastMessageUser = messagesList[messagesList.length - 1].user
-
-    if (lastMessageUser !== "Robot" && state.messagesList !== messagesList) {
-      setTimeout(
-        () =>
-          this.sendMessage(
-            "Robot",
-            `Здравствуйте ${lastMessageUser}!  Я робот,  не отвечайте мне.`,
-          ),
-        1500,
-      )
     }
   }
 
@@ -85,22 +68,20 @@ export class AppClientMessenger extends React.Component {
     return (
       <div>
         <input
-          className={"client-messenger__input"}
           onChange={this.handleNameChange}
           onKeyPress={this.onKeyPressHandler}
           value={this.state.userInput}
         />
-        <button
-          className={"client-messenger__button"}
-          type={"button"}
-          onClick={this.addText}
-        >
+        <button type={"button"} onClick={this.addText}>
           Отправить
         </button>
       </div>
     )
   }
 
+  handleNameChange = (event) => {
+    this.setState({ userInput: event.target.value })
+  }
   render() {
     return (
       <>

@@ -1,7 +1,18 @@
-import { MessageList } from "@components"
-import React from "react"
+import { ChatList, MessageList } from "@components"
+import { Input, InputAdornment, withStyles } from "@material-ui/core"
+import { Send } from "@material-ui/icons"
+import React, { createRef } from "react"
+import styles from "./layout.module.css"
 
-export class AppClientMessenger extends React.Component {
+const StyledInput = withStyles(() => ({
+  root: {
+    "&": {
+      padding: "5px",
+    },
+  },
+}))(Input)
+
+export class Layout extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -17,6 +28,7 @@ export class AppClientMessenger extends React.Component {
       ],
       userInput: "",
     }
+    this.test = createRef()
   }
 
   sendMessage = (author, message) => {
@@ -50,10 +62,10 @@ export class AppClientMessenger extends React.Component {
   }
 
   addText = () => {
-    const inputValue = this.state.userInput
+    const userInput = this.state.userInput
 
-    if (!/^\s*$/.test(inputValue)) {
-      this.sendMessage("User2112", inputValue)
+    if (!/^\s*$/.test(userInput)) {
+      this.sendMessage("User2112", userInput)
       this.setState({ userInput: "" })
     }
   }
@@ -65,16 +77,28 @@ export class AppClientMessenger extends React.Component {
   }
 
   InputButton = () => {
+    const userInput = this.state.userInput
     return (
       <div>
-        <input
+        <StyledInput
+          placeholder={"Введите сообщение"}
           onChange={this.handleNameChange}
           onKeyPress={this.onKeyPressHandler}
-          value={this.state.userInput}
+          value={userInput}
+          fullWidth={true}
+          endAdornment={
+            <InputAdornment position={"end"}>
+              {userInput && (
+                <Send
+                  className={styles.icon}
+                  type={"button"}
+                  onClick={this.addText}
+                  fontSize={"small"}
+                />
+              )}
+            </InputAdornment>
+          }
         />
-        <button type={"button"} onClick={this.addText}>
-          Отправить
-        </button>
       </div>
     )
   }
@@ -82,11 +106,17 @@ export class AppClientMessenger extends React.Component {
   handleNameChange = (event) => {
     this.setState({ userInput: event.target.value })
   }
+
   render() {
+    const messagesList = this.state.messagesList
+
     return (
       <>
-        <MessageList messagesList={this.state.messagesList} />
-        <this.InputButton />
+        <ChatList />
+        <div>
+          <MessageList messagesList={messagesList} />
+          <this.InputButton />
+        </div>
       </>
     )
   }

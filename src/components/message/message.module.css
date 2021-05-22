@@ -1,0 +1,20 @@
+.message__box{
+    width: 50%;
+    border: 1px solid #000;
+    border-radius: 25px;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 5px;
+
+}
+
+.message__text {
+    font-size: 19px;
+    margin: 0 0 0 5px;
+    word-wrap: break-word;
+}
+
+.message__user {
+    text-align: right;
+    margin: 0;
+}

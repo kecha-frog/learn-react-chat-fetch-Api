@@ -1,6 +1,7 @@
 import { Message } from "@components"
 import PropTypes from "prop-types"
 import React from "react"
+import styles from "./message-list.module.css"
 
 export class MessageList extends React.Component {
   static propTypes = {
@@ -10,7 +11,7 @@ export class MessageList extends React.Component {
   render() {
     const { messagesList } = this.props
     return (
-      <div className={"client-messenger__messages"}>
+      <div className={styles.messagesList}>
         {messagesList.map((message, index) => (
           <Message message={message} key={index} />
         ))}

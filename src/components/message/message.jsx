@@ -1,5 +1,6 @@
 import PropTypes from "prop-types"
 import React from "react"
+import styles from "./message.module.css"
 
 export class Message extends React.Component {
   static propTypes = {
@@ -15,10 +16,10 @@ export class Message extends React.Component {
 
     return (
       <div
-        className={`client-messenger__messagesBox client-messenger__messagesBox--${user.toLowerCase()}`}
+        className={styles.message__box + ` message__box--${user.toLowerCase()}`}
       >
-        <p className="client-messenger__messageText">{text}</p>
-        <h5 className="client-messenger__messageUser">{user}</h5>
+        <p className={styles.message__text}>{text}</p>
+        <h5 className={styles.message__user}>{user}</h5>
       </div>
     )
   }

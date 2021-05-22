@@ -1,36 +1,17 @@
 .client-messenger {
-    width: 60%;
-    margin: 0 auto;
-    background-color: rgb(201, 204, 198);
+    background-color: #CED6DF;
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 50vh;
+    width: 800px;
+    margin: 0 auto;
+
 }
 
-.client-messenger__messages{
-    overflow: auto;
-    overflow-scrolling: auto;
-}
-.client-messenger__messagesBox{
-    width: 50%;
-    border: 1px solid #000;
-    border-radius: 25px;
-    margin-bottom: 5px;
-    right: 0;
-}
-
-
-.client-messenger__messagesBox--robot{
+.message__box--robot{
     margin-left: auto;
+    background-color: #FFFFFF;
+
 }
 
-.client-messenger__messageText {
-    font-size: 19px;
-    margin: 10px;
-}
-
-.client-messenger__messageUser {
-    text-align: right;
-    margin: 10px;
+.message__box--user2112{
+    background-color: #EEFDDC;
 }

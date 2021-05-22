@@ -1,121 +1,15 @@
-import { ChatList, MessageList } from "@components"
-import { Input, InputAdornment, withStyles } from "@material-ui/core"
-import { Send } from "@material-ui/icons"
-import React, { createRef } from "react"
+import { ChatList, Header, MessageList } from "@components"
+import React from "react"
 import styles from "./layout.module.css"
 
-const StyledInput = withStyles(() => ({
-  root: {
-    "&": {
-      padding: "5px",
-    },
-  },
-}))(Input)
-
 export class Layout extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      messagesList: [
-        {
-          user: "User2112",
-          text: "Вы кто ?",
-        },
-        {
-          user: "Robot",
-          text: "Я робот",
-        },
-      ],
-      userInput: "",
-    }
-    this.test = createRef()
-  }
-
-  sendMessage = (author, message) => {
-    const { messagesList } = this.state
-
-    this.setState({
-      messagesList: [
-        ...messagesList,
-        {
-          user: author,
-          text: message,
-        },
-      ],
-    })
-  }
-
-  componentDidUpdate = (props, state) => {
-    const { messagesList } = this.state
-    const lastMessageUser = messagesList[messagesList.length - 1].user
-
-    if (lastMessageUser !== "Robot" && state.messagesList !== messagesList) {
-      setTimeout(
-        () =>
-          this.sendMessage(
-            "Robot",
-            `Здравствуйте ${lastMessageUser}!  Я робот,  не отвечайте мне.`,
-          ),
-        500,
-      )
-    }
-  }
-
-  addText = () => {
-    const userInput = this.state.userInput
-
-    if (!/^\s*$/.test(userInput)) {
-      this.sendMessage("User2112", userInput)
-      this.setState({ userInput: "" })
-    }
-  }
-
-  onKeyPressHandler = ({ code }) => {
-    if (code === "Enter") {
-      this.addText()
-    }
-  }
-
-  InputButton = () => {
-    const userInput = this.state.userInput
-    return (
-      <div>
-        <StyledInput
-          placeholder={"Введите сообщение"}
-          onChange={this.handleNameChange}
-          onKeyPress={this.onKeyPressHandler}
-          value={userInput}
-          fullWidth={true}
-          endAdornment={
-            <InputAdornment position={"end"}>
-              {userInput && (
-                <Send
-                  className={styles.icon}
-                  type={"button"}
-                  onClick={this.addText}
-                  fontSize={"small"}
-                />
-              )}
-            </InputAdornment>
-          }
-        />
-      </div>
-    )
-  }
-
-  handleNameChange = (event) => {
-    this.setState({ userInput: event.target.value })
-  }
-
   render() {
-    const messagesList = this.state.messagesList
-
     return (
       <>
-        <ChatList />
-        <div>
-          <MessageList messagesList={messagesList} />
-          <this.InputButton />
+        <Header />
+        <div className={styles.messenger}>
+          <ChatList />
+          <MessageList />
         </div>
       </>
     )

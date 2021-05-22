@@ -1,11 +1,4 @@
-.icon{
-    color: #FFFFFF;
-    cursor: pointer;
-    background-color: #3CA7E1;
-    border-radius: 50%;
-    padding: 10px;
-}
-.messageListBox{
-    width: 70%;
-
+.messenger{
+    background-color: #CED6DF;
+    display: flex;
 }

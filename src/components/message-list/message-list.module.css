@@ -1,6 +1,17 @@
+.messagesListBox{
+    width: 70%;
+}
+
 .messagesList{
     overflow: auto;
     padding: 10px;
     height: 700px;
-    width: 70%;
+}
+
+.icon{
+    color: #FFFFFF;
+    cursor: pointer;
+    background-color: #3CA7E1;
+    border-radius: 50%;
+    padding: 10px;
 }

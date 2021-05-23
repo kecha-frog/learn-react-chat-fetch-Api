@@ -7,6 +7,7 @@ const StyledListItem = withStyles(() => ({
   root: {
     "&": {
       border: "1px groove",
+      borderRightStyle: "none",
     },
   },
 }))(ListItem)

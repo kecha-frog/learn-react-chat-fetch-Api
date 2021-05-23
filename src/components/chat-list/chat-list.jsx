@@ -12,7 +12,11 @@ export class ChatList extends React.Component {
   render() {
     const { chats, selectedIndex } = this.state
     return (
-      <List aria-label="contacts" className={styles.chat_list}>
+      <List
+        aria-label="contacts"
+        className={styles.chat_list}
+        disablePadding={true}
+      >
         {chats.map((chat, index) => (
           <Chat title={chat} key={index} selected={selectedIndex} />
         ))}

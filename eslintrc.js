@@ -16,7 +16,7 @@ module.exports = {
   extends: ["eslint:recommended", "plugin:react/recommended", "prettier"],
   rules: {
     // отрлючить по желанию
-/*    "react/prop-types": "off",*/
+    "react/prop-types": "off",
     // ESLINT RULES
     // https://eslint.org/docs/rules/
     "no-useless-catch": "warn", // TODO: FIX, WAS 8 ERRORS

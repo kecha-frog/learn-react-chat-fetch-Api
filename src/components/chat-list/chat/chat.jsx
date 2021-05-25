@@ -22,7 +22,6 @@ export class Chat extends React.Component {
 
   render() {
     const { title, handleListItemClick, selected, index } = this.props
-    console.log(selected)
     return (
       <StyledListItem
         onClick={(event) => handleListItemClick(event, index)}

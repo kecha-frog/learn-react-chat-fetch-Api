@@ -19,17 +19,17 @@ export class MessageList extends React.Component {
     this.state = {
       messagesList: [
         {
-          user: "User2112",
-          text: "Вы кто ?",
+          author: "User2112",
+          message: "Вы кто ?",
         },
         {
-          user: "Robot",
-          text: "Я робот",
+          author: "Robot",
+          message: "Я робот",
         },
       ],
-      userInput: "",
+      value: "",
     }
-    this.test = createRef()
+    this.test = createRef() //TODO УБРАТЬ
   }
 
   sendMessage = (author, message) => {
@@ -40,8 +40,8 @@ export class MessageList extends React.Component {
         messagesList: [
           ...messagesList,
           {
-            user: author,
-            text: message,
+            author: author,
+            message: message,
           },
         ],
       })
@@ -51,18 +51,18 @@ export class MessageList extends React.Component {
         messagesList: [
           ...messagesList,
           {
-            user: author,
-            text: message,
+            author: author,
+            message: message,
           },
         ],
-        userInput: "",
+        value: "",
       })
     }
   }
 
   componentDidUpdate = (props, state) => {
     const { messagesList } = this.state
-    const lastMessageUser = messagesList[messagesList.length - 1].user
+    const lastMessageUser = messagesList[messagesList.length - 1].author
 
     if (lastMessageUser !== "Robot" && state.messagesList !== messagesList) {
       setTimeout(
@@ -77,10 +77,10 @@ export class MessageList extends React.Component {
   }
 
   addText = () => {
-    const { userInput } = this.state
+    const { value } = this.state
 
-    if (!/^\s*$/.test(userInput)) {
-      this.sendMessage("User2112", userInput)
+    if (!/^\s*$/.test(value)) {
+      this.sendMessage("User2112", value)
     }
   }
 
@@ -91,18 +91,18 @@ export class MessageList extends React.Component {
   }
 
   InputButton = () => {
-    const { userInput } = this.state
+    const { value } = this.state
     return (
       <div>
         <StyledInput
           placeholder={"Введите сообщение"}
           onChange={this.handleNameChange}
           onKeyPress={this.onKeyPressHandler}
-          value={userInput}
+          value={value}
           fullWidth={true}
           endAdornment={
             <InputAdornment position={"end"}>
-              {userInput && (
+              {value && (
                 <Send
                   className={styles.icon}
                   type={"button"}
@@ -118,7 +118,7 @@ export class MessageList extends React.Component {
   }
 
   handleNameChange = (event) => {
-    this.setState({ userInput: event.target.value })
+    this.setState({ value: event.target.value })
   }
 
   render() {

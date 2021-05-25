@@ -9,8 +9,14 @@ export class ChatList extends React.Component {
     selectedIndex: 0,
   }
 
+  handleListItemClick = (event, index) => {
+    this.setState({
+      selectedIndex: index,
+    })
+  }
+
   render() {
-    const { chats, selectedIndex } = this.state
+    const { chats } = this.state
     return (
       <List
         aria-label="contacts"
@@ -18,7 +24,13 @@ export class ChatList extends React.Component {
         disablePadding={true}
       >
         {chats.map((chat, index) => (
-          <Chat title={chat} key={index} selected={selectedIndex} />
+          <Chat
+            handleListItemClick={this.handleListItemClick}
+            title={chat}
+            key={index}
+            index={index}
+            selected={this.state.selectedIndex === index}
+          />
         ))}
       </List>
     )

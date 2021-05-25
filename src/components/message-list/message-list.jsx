@@ -35,15 +35,29 @@ export class MessageList extends React.Component {
   sendMessage = (author, message) => {
     const { messagesList } = this.state
 
-    this.setState({
-      messagesList: [
-        ...messagesList,
-        {
-          user: author,
-          text: message,
-        },
-      ],
-    })
+    if (author === "Robot") {
+      this.setState({
+        messagesList: [
+          ...messagesList,
+          {
+            user: author,
+            text: message,
+          },
+        ],
+      })
+    } else {
+      console.log("!!")
+      this.setState({
+        messagesList: [
+          ...messagesList,
+          {
+            user: author,
+            text: message,
+          },
+        ],
+        userInput: "",
+      })
+    }
   }
 
   componentDidUpdate = (props, state) => {
@@ -63,11 +77,10 @@ export class MessageList extends React.Component {
   }
 
   addText = () => {
-    const userInput = this.state.userInput
+    const { userInput } = this.state
 
     if (!/^\s*$/.test(userInput)) {
       this.sendMessage("User2112", userInput)
-      this.setState({ userInput: "" })
     }
   }
 
@@ -78,7 +91,7 @@ export class MessageList extends React.Component {
   }
 
   InputButton = () => {
-    const userInput = this.state.userInput
+    const { userInput } = this.state
     return (
       <div>
         <StyledInput
@@ -109,7 +122,7 @@ export class MessageList extends React.Component {
   }
 
   render() {
-    const messagesList = this.state.messagesList
+    const { messagesList } = this.state
     return (
       <div className={styles.messagesListBox}>
         <div className={styles.messagesList}>

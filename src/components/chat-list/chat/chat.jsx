@@ -15,14 +15,21 @@ const StyledListItem = withStyles(() => ({
 export class Chat extends React.Component {
   static propTypes = {
     title: PropTypes.string,
-    selected: PropTypes.number,
+    selected: PropTypes.bool,
     handleListItemClick: PropTypes.func,
+    index: PropTypes.number,
   }
 
   render() {
-    const { title, handleListItemClick, selected } = this.props
+    const { title, handleListItemClick, selected, index } = this.props
+    console.log(selected)
     return (
-      <StyledListItem button={true} href={"#"}>
+      <StyledListItem
+        onClick={(event) => handleListItemClick(event, index)}
+        button={true}
+        href={"#"}
+        selected={selected}
+      >
         <ListItemText primary={title} />
       </StyledListItem>
     )

@@ -1,12 +1,16 @@
 import { Chat } from "@components"
 import { List } from "@material-ui/core"
+import PropTypes from "prop-types"
 import React from "react"
 import styles from "./chat-list.module.css"
 
 export class ChatList extends React.Component {
   state = {
-    chats: ["room1", "room2", "room3"],
     selectedIndex: 0,
+  }
+
+  static propTypes = {
+    parentState: PropTypes.object,
   }
 
   handleListItemClick = (event, index) => {
@@ -16,17 +20,20 @@ export class ChatList extends React.Component {
   }
 
   render() {
-    const { chats } = this.state
+    const { parentState } = this.props
+
+    const { conversations } = parentState
+
     return (
       <List
         aria-label="contacts"
         className={styles.chat_list}
         disablePadding={true}
       >
-        {chats.map((chat, index) => (
+        {conversations.map((conversation, index) => (
           <Chat
             handleListItemClick={this.handleListItemClick}
-            title={chat}
+            title={conversation.title}
             key={index}
             index={index}
             selected={this.state.selectedIndex === index}

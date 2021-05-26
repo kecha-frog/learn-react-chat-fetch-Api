@@ -1,27 +1,68 @@
+import PropTypes from "prop-types"
 import React from "react"
 
 export class MessageTransfer extends React.Component {
   state = {
     conversations: [
-      { title: "room1", value: "room1 test" },
-      { title: "room2", value: "room2 test" },
+      { title: "room1", value: "" },
+      { title: "room2", value: "" },
     ],
     messagesList: {
-      room1: [{ author: "User", message: "Привет !", date: new Date() }],
-      room2: [{ author: "User", message: "Привет room2!", date: new Date() }],
+      room1: [
+        { author: "User", message: "Привет !" },
+        { author: "Robot", message: "Ау !" },
+      ],
+      room2: [{ author: "User", message: "Привет room2!" }],
     },
+  }
+
+  static propTypes = {
+    match: PropTypes.object,
+    children: PropTypes.func,
+  }
+
+  sendMessage = ({ author, message }) => {
+    const { messagesList, conversations } = this.state
+    const { match } = this.props
+    const { params } = match
+
+    const newMessage = { author, message }
+
+    if (!/^\s*$/.test(message) && author !== "Robot") {
+      this.setState({
+        conversations: conversations.map((conversation) => {
+          if (params.roomId === conversation.title) {
+            return { ...conversation, value: "" }
+          }
+
+          return conversation
+        }),
+        messagesList: {
+          ...messagesList,
+          [params.roomId]: [...(messagesList[params.roomId] || []), newMessage],
+        },
+      })
+    } else if (!/^\s*$/.test(message)) {
+      this.setState({
+        messagesList: {
+          ...messagesList,
+          [params.roomId]: [...(messagesList[params.roomId] || []), newMessage],
+        },
+      })
+    }
   }
 
   handleChangeValue = (event) => {
     const { match } = this.props
     const { params } = match // :roomId - передаем в Route
+    const { conversations } = this.state
 
     const {
       target: { value },
-    } = event // ивент инпута
+    } = event
 
     this.setState({
-      conversations: this.conversations.map((conversation) => {
+      conversations: conversations.map((conversation) => {
         if (params.roomId === conversation.title) {
           return { ...conversation, value }
         }
@@ -30,28 +71,30 @@ export class MessageTransfer extends React.Component {
       }),
     })
   }
-
-  sendMessage = ({ author, message }) => {
-    if (!message) {
-      return
-    }
-
+  componentDidUpdate = (props, state) => {
     const { messagesList } = this.state
     const { match } = this.props
     const { params } = match // :roomId - передаем в Route
 
-    const newMessage = { author, message }
+    if (messagesList[params.roomId] !== undefined) {
+      const lastMessageAuthor =
+        messagesList[params.roomId][messagesList[params.roomId].length - 1]
+          .author
 
-    this.setState({
-      messagesList: {
-        ...messagesList,
-        [params.roomId]: [...(messagesList[params.roomId] || []), newMessage],
-      },
-    })
-  }
-
-  componentDidUpdate() {
-    // @TODO пренести ответ бота
+      if (
+        lastMessageAuthor !== "Robot" &&
+        state.messagesList[params.roomId] !== messagesList[params.roomId]
+      ) {
+        setTimeout(
+          () =>
+            this.sendMessage({
+              author: "Robot",
+              message: `Здравствуйте ${lastMessageAuthor}!  Я робот,  не отвечайте мне.`,
+            }),
+          500,
+        )
+      }
+    }
   }
 
   render() {
@@ -61,7 +104,7 @@ export class MessageTransfer extends React.Component {
     const { conversations, messagesList } = this.state
 
     const state = {
-      conversations, // их будет использовать ChatList[]
+      conversations,
       messagesList: messagesList[params.roomId] || [], // roomId это id текущей комнаты,=
       value:
         conversations.find(
@@ -75,6 +118,6 @@ export class MessageTransfer extends React.Component {
     }
 
     // патерн render-prop
-    return children([state, actions])
+    return children(state, actions)
   }
 }

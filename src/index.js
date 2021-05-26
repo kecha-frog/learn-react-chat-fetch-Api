@@ -5,7 +5,7 @@ import { BrowserRouter } from "react-router-dom"
 import React from "react"
 
 const App = () => {
-  return <Layout messageList={<MessageList />} chatList={<ChatList />} />
+  return <Layout messageList={MessageList} chatList={ChatList} />
 }
 
 ReactDom.render(

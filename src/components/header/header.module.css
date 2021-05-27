@@ -1,10 +1,12 @@
 .header{
-    text-align: center;
+    align-items: center;
     background-color: #28A4E3;
     border-style: groove;
     display: flex;
+    justify-content: space-between;
+    padding: 0 30px;
 }
 
 .text{
-
+    color: white;
 }

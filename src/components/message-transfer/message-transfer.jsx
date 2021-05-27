@@ -103,7 +103,7 @@ export class MessageTransfer extends React.Component {
     this.setState({
       conversations: [
         ...conversations,
-        { title: `room${++conversations.length}`, value: "Room" },
+        { title: `room${++conversations.length}`, value: "" },
       ],
       messagesList: {
         ...messagesList,

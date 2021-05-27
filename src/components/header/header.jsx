@@ -1,16 +1,7 @@
-import { withStyles } from "@material-ui/core"
 import PropTypes from "prop-types"
 import { Link, Switch, Route } from "react-router-dom"
 import React from "react"
 import styles from "./header.module.css"
-
-const StyledLink = withStyles(() => ({
-  root: {
-    "&": {
-      display: "block",
-    },
-  },
-}))(Link)
 
 export class Header extends React.Component {
   Profile = () => {
@@ -30,8 +21,8 @@ export class Header extends React.Component {
           <Route path="/profile" render={this.Profile} />
         </Switch>
         <header className={styles.header}>
-          <h3>{parentParams.roomId.toUpperCase()}</h3>
-          <StyledLink to="/profile">Profile</StyledLink>
+          <h3 className={styles.text}>{parentParams.roomId.toUpperCase()}</h3>
+          <Link to="/profile">Profile</Link>
         </header>
       </>
     )

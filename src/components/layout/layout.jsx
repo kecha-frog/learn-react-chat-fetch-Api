@@ -1,6 +1,6 @@
 import { Header, MessageTransfer } from "@components"
 import PropTypes from "prop-types"
-import { Switch, Route } from "react-router-dom"
+import { Switch, Route, Link } from "react-router-dom"
 import React from "react"
 import styles from "./layout.module.css"
 
@@ -16,6 +16,11 @@ export class Layout extends React.Component {
 
     return (
       <div>
+        <Switch>
+          <Route path={"/"}>
+            <Link to="/chat/room1">Chat</Link>
+          </Route>
+        </Switch>
         <Switch>
           <Route path={["/chat/:roomId"]}>
             {(params) => (

@@ -11,8 +11,8 @@ export class Layout extends React.Component {
   }
 
   render() {
-    this.chatList = this.props.chatList
-    this.messageList = this.props.messageList
+    const ChatList = this.props.chatList
+    const MessageList = this.props.messageList
 
     return (
       <div>
@@ -20,15 +20,12 @@ export class Layout extends React.Component {
           <Route path={["/chat/:roomId"]}>
             {(params) => (
               <MessageTransfer {...params}>
-                {(state, actions) => (
+                {(state, actions, params) => (
                   <>
-                    <Header />
+                    <Header parentParams={params} />
                     <div className={styles.messenger}>
-                      <this.chatList parentState={state} />
-                      <this.messageList
-                        parentState={state}
-                        parentAction={actions}
-                      />
+                      <ChatList parentState={state} parentAction={actions} />
+                      <MessageList parentState={state} parentAction={actions} />
                     </div>
                   </>
                 )}

@@ -97,6 +97,23 @@ export class MessageTransfer extends React.Component {
     }
   }
 
+  addRoom = () => {
+    const { messagesList, conversations } = this.state
+
+    this.setState({
+      conversations: [
+        ...conversations,
+        { title: `room${++conversations.length}`, value: "Room" },
+      ],
+      messagesList: {
+        ...messagesList,
+        [`room${conversations.length}`]: [
+          { author: "User", message: `Привет room${conversations.length}!` },
+        ],
+      },
+    })
+  }
+
   render() {
     const { children, match } = this.props
     const { params } = match
@@ -115,9 +132,10 @@ export class MessageTransfer extends React.Component {
     const actions = {
       sendMessage: this.sendMessage,
       handleChangeValue: this.handleChangeValue,
+      addRoom: this.addRoom,
     }
 
     // патерн render-prop
-    return children(state, actions)
+    return children(state, actions, params)
   }
 }

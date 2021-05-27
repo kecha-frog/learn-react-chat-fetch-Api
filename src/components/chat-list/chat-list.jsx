@@ -11,6 +11,7 @@ export class ChatList extends React.Component {
 
   static propTypes = {
     parentState: PropTypes.object,
+    parentAction: PropTypes.object,
   }
 
   handleListItemClick = (event, index) => {
@@ -21,9 +22,10 @@ export class ChatList extends React.Component {
 
   render() {
     const { parentState } = this.props
-
     const { conversations } = parentState
 
+    const { parentAction } = this.props
+    const { addRoom } = parentAction
     return (
       <List
         aria-label="contacts"
@@ -39,6 +41,9 @@ export class ChatList extends React.Component {
             selected={this.state.selectedIndex === index}
           />
         ))}
+        <li>
+          <button onClick={addRoom}>Добавить</button>
+        </li>
       </List>
     )
   }

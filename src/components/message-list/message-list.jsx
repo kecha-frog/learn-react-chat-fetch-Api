@@ -14,7 +14,65 @@ const StyledInput = withStyles(() => ({
   },
 }))(Input)
 
-export class MessageList extends React.Component {
+export const MessageList = (props) => {
+  const { parentState, parentAction } = props
+  const { handleChangeValue, sendMessage } = parentAction
+  const { value } = parentState
+  const { messagesList } = parentState
+
+  const onKeyPressHandler = ({ code }) => {
+    if (code === "Enter") {
+      sendMessage({ author: "User", message: value })
+    }
+  }
+
+  const InputButton = () => {
+    return (
+      <div>
+        <StyledInput
+          autoFocus={true}
+          placeholder={"Введите сообщение"}
+          onChange={(event) => handleChangeValue(event)}
+          onKeyPress={onKeyPressHandler}
+          value={value}
+          fullWidth={true}
+          endAdornment={
+            <InputAdornment position={"end"}>
+              {value && (
+                <Send
+                  className={styles.icon}
+                  type={"button"}
+                  onClick={() =>
+                    sendMessage({ author: "User", message: value })
+                  }
+                  fontSize={"small"}
+                />
+              )}
+            </InputAdornment>
+          }
+        />
+      </div>
+    )
+  }
+
+  return (
+    <div className={styles.messagesListBox}>
+      <ul className={styles.messagesList}>
+        {messagesList.map((message, index) => (
+          <Message messages={message} key={index} />
+        ))}
+      </ul>
+      <InputButton />
+    </div>
+  )
+}
+
+MessageList.propTypes = {
+  parentAction: PropTypes.object,
+  parentState: PropTypes.object,
+}
+
+/*export class MessageList extends React.Component {
   static propTypes = {
     parentAction: PropTypes.object,
     parentState: PropTypes.object,
@@ -66,13 +124,13 @@ export class MessageList extends React.Component {
 
     return (
       <div className={styles.messagesListBox}>
-        <div className={styles.messagesList}>
+        <ul className={styles.messagesList}>
           {messagesList.map((message, index) => (
             <Message messages={message} key={index} />
           ))}
-        </div>
+        </ul>
         <this.InputButton />
       </div>
     )
   }
-}
+}*/

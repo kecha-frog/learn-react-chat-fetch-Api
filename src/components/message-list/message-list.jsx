@@ -2,7 +2,7 @@ import { Message } from "@components"
 import { Input, InputAdornment, withStyles } from "@material-ui/core"
 import { Send } from "@material-ui/icons"
 import PropTypes from "prop-types"
-import React from "react"
+import React, { createRef } from "react"
 import styles from "./message-list.module.css"
 
 const StyledInput = withStyles(() => ({
@@ -36,6 +36,7 @@ export const MessageList = (props) => {
           onKeyPress={onKeyPressHandler}
           value={value}
           fullWidth={true}
+          key={"124124124"}
           endAdornment={
             <InputAdornment position={"end"}>
               {value && (

@@ -1,10 +1,8 @@
 import { ChatList, Layout, MessageList, Header } from "@components"
 import { Link, Route, Switch } from "react-router-dom"
-import React, { createRef } from "react"
+import React from "react"
 
 export const Chat = () => {
-  const test = createRef()
-  console.log(test.current)
   return (
     <>
       <Switch>
@@ -13,8 +11,7 @@ export const Chat = () => {
         </Route>
       </Switch>
       <Switch>
-        Provider
-        <Route path={["/chat/:roomId"]} ref={test}>
+        <Route path={["/chat/:roomId"]}>
           {(params) => (
             <Layout
               header={Header}

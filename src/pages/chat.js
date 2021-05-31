@@ -1,4 +1,4 @@
-import { ChatList, Layout, MessageList, Header } from "@components"
+import { ChatList, Layout, MessageList, Header, Profile } from "@components"
 import { Link, Route, Switch } from "react-router-dom"
 import React from "react"
 
@@ -8,6 +8,11 @@ export const Chat = () => {
       <Switch>
         <Route path={"/"}>
           <Link to="/chat/room1">Chat</Link>
+        </Route>
+      </Switch>
+      <Switch>
+        <Route path="/profile">
+          <Profile />
         </Route>
       </Switch>
       <Switch>

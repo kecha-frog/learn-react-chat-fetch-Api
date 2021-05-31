@@ -5,7 +5,6 @@ import React from "react"
 import styles from "./layout.module.css"
 
 export const Layout = (props) => {
-  const Header = props.header
   const ChatList = props.chatList
   const MessageList = props.messageList
 
@@ -17,7 +16,6 @@ export const Layout = (props) => {
 
   return (
     <>
-      <Header />
       <div className={styles.messenger}>
         <ChatList />
         <MessageList />

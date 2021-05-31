@@ -11,6 +11,7 @@ export const Header = () => {
       <header className={styles.header}>
         <h3 className={styles.text}>{routeReducer.roomId}</h3>
         <Link to="/profile">Profile</Link>
+        <Link to="/chat">Chats</Link>
       </header>
     </>
   )

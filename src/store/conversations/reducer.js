@@ -9,6 +9,11 @@ const initialState = [
   { title: "room2", value: "" },
 ]
 
+function randomInteger(min, max) {
+  const rand = min + Math.random() * (max + 1 - min)
+  return Math.floor(rand)
+}
+
 export function conversationsReducer(state = initialState, action) {
   switch (action.type) {
     case RESET_VALUE_CONVERSATIONS:

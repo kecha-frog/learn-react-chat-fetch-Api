@@ -16,13 +16,16 @@ export function messagesReducer(state = initialState, action) {
         [action.roomId]: [...(state[action.roomId] || []), action.newMessage],
       }
     case ADD_ROOM_MESSAGES:
+      console.log()
       return {
         ...state,
-        [`room${action.length}`]: [
-          { author: "User", message: `Привет room${action.length}!` },
+        [`room${++Object.keys(state).length}`]: [
+          {
+            author: "User",
+            message: `Привет room${++Object.keys(state).length}!`,
+          },
         ],
       }
-
     default:
       return state
   }

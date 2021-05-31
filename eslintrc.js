@@ -13,7 +13,7 @@ module.exports = {
   },
   parser: "babel-eslint",
   plugins: ["react", "react-hooks", "import", "prettier"],
-  extends: ["eslint:recommended", "plugin:react/recommended", "prettier"],
+  extends: ["eslint:recommended", "plugin:react/recommended", "prettier", "plugin:react-hooks/recommended"],
   rules: {
     // отрлючить по желанию
     // "react/prop-types": "off",

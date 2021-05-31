@@ -1,35 +1,25 @@
 import "./index.css"
-import { Layout, MessageList, ChatList } from "@components"
+import { Chat } from "@app/pages"
+import { store } from "@store"
 import ReactDom from "react-dom"
-import { BrowserRouter, Link, Route, Switch } from "react-router-dom"
+import { Provider } from "react-redux"
+import { BrowserRouter } from "react-router-dom"
 import React from "react"
 
 const App = () => {
   return (
     <>
-      <Switch>
-        <Route path={"/"}>
-          <Link to="/chat/room1">Chat</Link>
-        </Route>
-      </Switch>
-      <Switch>
-        <Route path={["/chat/:roomId"]}>
-          {(params) => (
-            <Layout
-              messageList={MessageList}
-              chatList={ChatList}
-              params={params}
-            />
-          )}
-        </Route>
-      </Switch>
+      <Chat />
     </>
   )
 }
 
 ReactDom.render(
   <BrowserRouter>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </BrowserRouter>,
+
   document.getElementById("root"),
 )

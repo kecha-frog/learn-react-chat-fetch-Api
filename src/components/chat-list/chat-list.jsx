@@ -1,15 +1,22 @@
 import { Chat } from "@components"
 import { List } from "@material-ui/core"
-import PropTypes from "prop-types"
+import { addRoomConversations } from "@store/conversations"
+import { addRoomMessages } from "@store/messages"
+import { useSelector, useDispatch } from "react-redux"
 import React from "react"
 import styles from "./chat-list.module.css"
 
-export const ChatList = (props) => {
+export const ChatList = () => {
   const [selectedIndex, setSelectedIndex] = React.useState(0)
 
-  const { conversations } = props.parentState
+  const { conversationsReducer } = useSelector((state) => state)
 
-  const { addRoom } = props.parentAction
+  const dispatch = useDispatch()
+
+  const addRoom = () => {
+    dispatch(addRoomConversations())
+    dispatch(addRoomMessages())
+  }
 
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index)
@@ -21,7 +28,7 @@ export const ChatList = (props) => {
       className={styles.chat_list}
       disablePadding={true}
     >
-      {conversations.map((conversation, index) => (
+      {conversationsReducer.map((conversation, index) => (
         <Chat
           handleListItemClick={handleListItemClick}
           title={conversation.title}
@@ -35,9 +42,4 @@ export const ChatList = (props) => {
       </li>
     </List>
   )
-}
-
-ChatList.propTypes = {
-  parentState: PropTypes.object,
-  parentAction: PropTypes.object,
 }

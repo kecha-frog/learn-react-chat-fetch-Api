@@ -1,8 +1,14 @@
 import { Message } from "@components"
 import { Input, InputAdornment, withStyles } from "@material-ui/core"
 import { Send } from "@material-ui/icons"
+import {
+  changeValueConversations,
+  resetValueConversations,
+} from "@store/conversations"
+import { sendMessages } from "@store/messages"
 import PropTypes from "prop-types"
-import React, { createRef } from "react"
+import { useSelector, useDispatch } from "react-redux"
+import React from "react"
 import styles from "./message-list.module.css"
 
 const StyledInput = withStyles(() => ({
@@ -14,29 +20,58 @@ const StyledInput = withStyles(() => ({
   },
 }))(Input)
 
-export const MessageList = (props) => {
-  const { parentState, parentAction } = props
-  const { handleChangeValue, sendMessage } = parentAction
-  const { value } = parentState
-  const { messagesList } = parentState
+export const MessageList = () => {
+  const { conversationsReducer, messagesReducer, routeReducer } = useSelector(
+    (state) => state,
+  )
 
-  const onKeyPressHandler = ({ code }) => {
-    if (code === "Enter") {
-      sendMessage({ author: "User", message: value })
+  const dispatch = useDispatch()
+
+  const messagesList = messagesReducer[routeReducer.roomId] || []
+
+  const value =
+    conversationsReducer.find(
+      (conversation) => conversation.title === routeReducer.roomId,
+    )?.value || ""
+
+  const sendMessage = ({ author, message }) => {
+    const newMessage = { author, message }
+
+    if (!/^\s*$/.test(message) && author !== "Robot") {
+      dispatch(resetValueConversations(routeReducer))
+      dispatch(sendMessages(routeReducer, newMessage))
+    } else if (!/^\s*$/.test(message)) {
+      dispatch(sendMessages(routeReducer, newMessage))
     }
   }
 
-  const InputButton = () => {
+  const onKeyPressHandler = React.useCallback(
+    ({ code }) => {
+      if (code === "Enter") {
+        sendMessage({ author: "User", message: value })
+      }
+    },
+    [sendMessage, value],
+  )
+
+  const handleChangeValue = (event) => {
+    const {
+      target: { value },
+    } = event
+
+    dispatch(changeValueConversations(routeReducer, value))
+  }
+
+  const InputButton = React.useCallback(() => {
     return (
-      <div>
+      <>
         <StyledInput
           autoFocus={true}
           placeholder={"Введите сообщение"}
-          onChange={(event) => handleChangeValue(event)}
+          onChange={handleChangeValue}
           onKeyPress={onKeyPressHandler}
           value={value}
           fullWidth={true}
-          key={"124124124"}
           endAdornment={
             <InputAdornment position={"end"}>
               {value && (
@@ -52,9 +87,9 @@ export const MessageList = (props) => {
             </InputAdornment>
           }
         />
-      </div>
+      </>
     )
-  }
+  }, [handleChangeValue, onKeyPressHandler, sendMessage, value])
 
   return (
     <div className={styles.messagesListBox}>
@@ -73,65 +108,32 @@ MessageList.propTypes = {
   parentState: PropTypes.object,
 }
 
-/*export class MessageList extends React.Component {
-  static propTypes = {
-    parentAction: PropTypes.object,
-    parentState: PropTypes.object,
-  }
+/*React.useEffect(() => {
+  if (messagesList[params.roomId] !== undefined) {
+    const lastMessageAuthor =
+      messagesList[params.roomId][messagesList[params.roomId].length - 1]
+        .author
 
-  InputButton = () => {
-    const { parentState, parentAction } = this.props
-
-    const value = parentState.value
-
-    const { handleChangeValue, sendMessage } = parentAction
-
-    this.onKeyPressHandler = ({ code }) => {
-      if (code === "Enter") {
-        sendMessage({ author: "User", message: value })
-      }
+    if (
+      lastMessageAuthor !== "Robot" &&
+      messagesList[params.roomId] !== SetMessagesList[params.roomId] &&
+      messagesList[params.roomId].length !== 1
+    ) {
+      setTimeout(
+        () =>
+          SetMessagesList({
+            ...messagesList,
+            [params.roomId]: [
+              ...messagesList[params.roomId],
+              {
+                author: "Robot",
+                message: `Здравствуйте ${lastMessageAuthor}!  Я робот,  не отвечайте мне.`,
+              },
+            ],
+          }),
+        500,
+      )
     }
-
-    return (
-      <div>
-        <StyledInput
-          placeholder={"Введите сообщение"}
-          onChange={(event) => handleChangeValue(event)}
-          onKeyPress={this.onKeyPressHandler}
-          value={value}
-          fullWidth={true}
-          endAdornment={
-            <InputAdornment position={"end"}>
-              {value && (
-                <Send
-                  className={styles.icon}
-                  type={"button"}
-                  onClick={(message = { author: "User", message: value }) =>
-                    sendMessage(message)
-                  }
-                  fontSize={"small"}
-                />
-              )}
-            </InputAdornment>
-          }
-        />
-      </div>
-    )
   }
-
-  render() {
-    const { parentState } = this.props
-    const messagesList = parentState.messagesList
-
-    return (
-      <div className={styles.messagesListBox}>
-        <ul className={styles.messagesList}>
-          {messagesList.map((message, index) => (
-            <Message messages={message} key={index} />
-          ))}
-        </ul>
-        <this.InputButton />
-      </div>
-    )
-  }
-}*/
+}, [messagesList, params.roomId, SetMessagesList])
+*/

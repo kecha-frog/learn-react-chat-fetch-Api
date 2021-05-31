@@ -1,7 +1,8 @@
 import { Message } from "@components"
 import { Input, InputAdornment, withStyles } from "@material-ui/core"
 import { Send } from "@material-ui/icons"
-import React, { createRef } from "react"
+import PropTypes from "prop-types"
+import React from "react"
 import styles from "./message-list.module.css"
 
 const StyledInput = withStyles(() => ({
@@ -14,86 +15,41 @@ const StyledInput = withStyles(() => ({
 }))(Input)
 
 export class MessageList extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      messagesList: [
-        {
-          user: "User2112",
-          text: "Вы кто ?",
-        },
-        {
-          user: "Robot",
-          text: "Я робот",
-        },
-      ],
-      userInput: "",
-    }
-    this.test = createRef()
-  }
-
-  sendMessage = (author, message) => {
-    const { messagesList } = this.state
-
-    this.setState({
-      messagesList: [
-        ...messagesList,
-        {
-          user: author,
-          text: message,
-        },
-      ],
-    })
-  }
-
-  componentDidUpdate = (props, state) => {
-    const { messagesList } = this.state
-    const lastMessageUser = messagesList[messagesList.length - 1].user
-
-    if (lastMessageUser !== "Robot" && state.messagesList !== messagesList) {
-      setTimeout(
-        () =>
-          this.sendMessage(
-            "Robot",
-            `Здравствуйте ${lastMessageUser}!  Я робот,  не отвечайте мне.`,
-          ),
-        500,
-      )
-    }
-  }
-
-  addText = () => {
-    const userInput = this.state.userInput
-
-    if (!/^\s*$/.test(userInput)) {
-      this.sendMessage("User2112", userInput)
-      this.setState({ userInput: "" })
-    }
-  }
-
-  onKeyPressHandler = ({ code }) => {
-    if (code === "Enter") {
-      this.addText()
-    }
+  static propTypes = {
+    parentAction: PropTypes.object,
+    parentState: PropTypes.object,
   }
 
   InputButton = () => {
-    const userInput = this.state.userInput
+    const { parentState, parentAction } = this.props
+
+    const value = parentState.value
+
+    const { handleChangeValue, sendMessage } = parentAction
+
+    this.onKeyPressHandler = ({ code }) => {
+      if (code === "Enter") {
+        sendMessage({ author: "User", message: value })
+      }
+    }
+
     return (
       <div>
         <StyledInput
           placeholder={"Введите сообщение"}
-          onChange={this.handleNameChange}
+          onChange={(event) => handleChangeValue(event)}
           onKeyPress={this.onKeyPressHandler}
-          value={userInput}
+          value={value}
           fullWidth={true}
           endAdornment={
             <InputAdornment position={"end"}>
-              {userInput && (
+              {value && (
                 <Send
                   className={styles.icon}
                   type={"button"}
-                  onClick={this.addText}
+                  onClick={(message = { author: "User", message: value }) =>
+                    sendMessage(message)
+                  }
                   fontSize={"small"}
                 />
               )}
@@ -104,17 +60,15 @@ export class MessageList extends React.Component {
     )
   }
 
-  handleNameChange = (event) => {
-    this.setState({ userInput: event.target.value })
-  }
-
   render() {
-    const messagesList = this.state.messagesList
+    const { parentState } = this.props
+    const messagesList = parentState.messagesList
+
     return (
       <div className={styles.messagesListBox}>
         <div className={styles.messagesList}>
           {messagesList.map((message, index) => (
-            <Message message={message} key={index} />
+            <Message messages={message} key={index} />
           ))}
         </div>
         <this.InputButton />

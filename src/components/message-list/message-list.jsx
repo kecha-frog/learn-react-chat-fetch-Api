@@ -3,11 +3,13 @@ import { Input, InputAdornment, withStyles } from "@material-ui/core"
 import { Send } from "@material-ui/icons"
 import {
   changeValueConversations,
+  getChatList,
   resetValueConversations,
 } from "@store/conversations"
-import { sendMessages } from "@store/messages"
+import { getMessageList, sendMessages } from "@store/messages"
+import { getRouteParams } from "@store/route"
 import { useSelector, useDispatch } from "react-redux"
-import React, { useEffect, useCallback } from "react"
+import React, { useEffect, useCallback, useMemo } from "react"
 import styles from "./message-list.module.css"
 
 const StyledInput = withStyles(() => ({
@@ -21,16 +23,17 @@ const StyledInput = withStyles(() => ({
 
 let setTimeoutOn = true // Cделал для ответа робота чтоб много раз не отправлял повторно когда setTimeout скапливается в стеке, его надо в редукс переносить ?
 
-const selector = () => {
-  return (state) => state
-}
+getMessageList()
 
 export const MessageList = () => {
-  const memoSelector = useCallback((state) => selector()(state), [])
-  const { conversationsReducer, messagesReducer, routeReducer } =
-    useSelector(memoSelector)
+  const memoSelectorMessageList = useMemo(() => getMessageList(), [])
+  const MessageList = useSelector(memoSelectorMessageList)
+  const memoSelectorRouteParams = useMemo(() => getRouteParams(), [])
+  const RouteParams = useSelector(memoSelectorRouteParams)
+  const memoSelectorChatList = useMemo(() => getChatList(), [])
+  const ChatList = useSelector(memoSelectorChatList)
 
-  const messagesList = messagesReducer[routeReducer.roomId] || []
+  const messages = MessageList[RouteParams.roomId] || []
 
   const dispatch = useDispatch()
 
@@ -39,25 +42,25 @@ export const MessageList = () => {
       const newMessage = { author, message }
 
       if (!/^\s*$/.test(message) && author !== "Robot") {
-        dispatch(sendMessages(routeReducer, newMessage))
-        dispatch(resetValueConversations(routeReducer))
+        dispatch(sendMessages(RouteParams, newMessage))
+        dispatch(resetValueConversations(RouteParams))
       } else if (!/^\s*$/.test(message)) {
-        dispatch(sendMessages(routeReducer, newMessage))
+        dispatch(sendMessages(RouteParams, newMessage))
       }
     },
-    [dispatch, routeReducer],
+    [dispatch, RouteParams],
   )
 
   useEffect(() => {
-    if (messagesReducer[routeReducer.roomId] !== undefined) {
+    if (MessageList[RouteParams.roomId] !== undefined) {
       const lastMessageAuthor =
-        messagesReducer[routeReducer.roomId][
-          messagesReducer[routeReducer.roomId].length - 1
+        MessageList[RouteParams.roomId][
+          MessageList[RouteParams.roomId].length - 1
         ].author
 
       if (
         lastMessageAuthor !== "Robot" &&
-        messagesReducer[routeReducer.roomId].length !== 1 &&
+        MessageList[RouteParams.roomId].length !== 1 &&
         setTimeoutOn
       ) {
         setTimeoutOn = !setTimeoutOn
@@ -70,12 +73,11 @@ export const MessageList = () => {
         }, 500)
       }
     }
-  }, [messagesReducer, routeReducer.roomId, sendMessage])
+  }, [MessageList, RouteParams.roomId, sendMessage])
 
   const value =
-    conversationsReducer.find(
-      (conversation) => conversation.title === routeReducer.roomId,
-    )?.value || ""
+    ChatList.find((conversation) => conversation.title === RouteParams.roomId)
+      ?.value || ""
 
   const onKeyPressHandler = React.useCallback(
     ({ code }) => {
@@ -92,9 +94,9 @@ export const MessageList = () => {
         target: { value },
       } = event
 
-      dispatch(changeValueConversations(routeReducer, value))
+      dispatch(changeValueConversations(RouteParams, value))
     },
-    [dispatch, routeReducer],
+    [dispatch, RouteParams],
   )
 
   const InputButton = React.useCallback(() => {
@@ -129,7 +131,7 @@ export const MessageList = () => {
   return (
     <div className={styles.messagesListBox}>
       <ul className={styles.messagesList}>
-        {messagesList.map((message, index) => (
+        {messages.map((message, index) => (
           <Message messages={message} key={index} />
         ))}
       </ul>

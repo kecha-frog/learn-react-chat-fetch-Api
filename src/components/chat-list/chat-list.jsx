@@ -1,21 +1,17 @@
 import { Chat } from "@components"
 import { List } from "@material-ui/core"
-import { addRoomConversations } from "@store/conversations"
+import { addRoomConversations, getChatList } from "@store/conversations"
 import { addRoomMessages } from "@store/messages"
 import { useSelector, useDispatch } from "react-redux"
-import React, { useCallback } from "react"
+import React, { useMemo } from "react"
 import styles from "./chat-list.module.css"
 
-const selector = () => {
-  return (state) => state
-}
-
 export const ChatList = () => {
-  const memoSelector = useCallback((state) => selector()(state), [])
+  const memoSelector = useMemo(() => getChatList(), [])
 
   const [selectedIndex, setSelectedIndex] = React.useState(0)
 
-  const { conversationsReducer } = useSelector(memoSelector)
+  const chatList = useSelector(memoSelector)
 
   const dispatch = useDispatch()
 
@@ -34,7 +30,7 @@ export const ChatList = () => {
       className={styles.chat_list}
       disablePadding={true}
     >
-      {conversationsReducer.map((conversation, index) => (
+      {chatList.map((conversation, index) => (
         <Chat
           handleListItemClick={handleListItemClick}
           title={conversation.title}

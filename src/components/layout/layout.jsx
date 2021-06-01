@@ -1,4 +1,4 @@
-import { addParams } from "@store/route"
+import { routeParams } from "@store/route"
 import PropTypes from "prop-types"
 import { useDispatch } from "react-redux"
 import React from "react"
@@ -12,7 +12,7 @@ export const Layout = (props) => {
   const { params } = match
 
   const dispatch = useDispatch()
-  dispatch(addParams(params))
+  dispatch(routeParams(params))
 
   return (
     <>

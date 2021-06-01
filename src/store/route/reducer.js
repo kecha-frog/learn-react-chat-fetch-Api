@@ -1,13 +1,27 @@
-import { ADD_PARAMS } from "@store/route/type"
+import { ROUTE_PARAMS } from "@store/route/type"
 
 const initialState = {}
 
-export function routeReducer(state = initialState, action) {
+const createReducer = (initialState, handlers) => {
+  return function reducer(state = initialState, action) {
+    if (handlers.hasOwnProperty(action.type)) {
+      return handlers[action.type](state, action)
+    }
+
+    return state
+  }
+}
+
+export const routeReducer = createReducer(initialState, {
+  [ROUTE_PARAMS]: (state, action) => (state = action.params),
+})
+
+/*export function routeReducer(state = initialState, action) {
   switch (action.type) {
-    case ADD_PARAMS:
+    case ROUTE_PARAMS:
       return (state = action.params)
 
     default:
       return state
   }
-}
+}*/

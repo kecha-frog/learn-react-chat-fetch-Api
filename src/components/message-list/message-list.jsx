@@ -6,9 +6,8 @@ import {
   resetValueConversations,
 } from "@store/conversations"
 import { sendMessages } from "@store/messages"
-import PropTypes from "prop-types"
 import { useSelector, useDispatch } from "react-redux"
-import React from "react"
+import React, { useEffect, useCallback } from "react"
 import styles from "./message-list.module.css"
 
 const StyledInput = withStyles(() => ({
@@ -20,30 +19,63 @@ const StyledInput = withStyles(() => ({
   },
 }))(Input)
 
+let setTimeoutOn = true // Cделал для ответа робота чтоб много раз не отправлял повторно когда setTimeout скапливается в стеке, его надо в редукс переносить ?
+
+const selector = () => {
+  return (state) => state
+}
+
 export const MessageList = () => {
-  const { conversationsReducer, messagesReducer, routeReducer } = useSelector(
-    (state) => state,
-  )
+  const memoSelector = useCallback((state) => selector()(state), [])
+  const { conversationsReducer, messagesReducer, routeReducer } =
+    useSelector(memoSelector)
+
+  const messagesList = messagesReducer[routeReducer.roomId] || []
 
   const dispatch = useDispatch()
 
-  const messagesList = messagesReducer[routeReducer.roomId] || []
+  const sendMessage = useCallback(
+    ({ author, message }) => {
+      const newMessage = { author, message }
+
+      if (!/^\s*$/.test(message) && author !== "Robot") {
+        dispatch(sendMessages(routeReducer, newMessage))
+        dispatch(resetValueConversations(routeReducer))
+      } else if (!/^\s*$/.test(message)) {
+        dispatch(sendMessages(routeReducer, newMessage))
+      }
+    },
+    [dispatch, routeReducer],
+  )
+
+  useEffect(() => {
+    if (messagesReducer[routeReducer.roomId] !== undefined) {
+      const lastMessageAuthor =
+        messagesReducer[routeReducer.roomId][
+          messagesReducer[routeReducer.roomId].length - 1
+        ].author
+
+      if (
+        lastMessageAuthor !== "Robot" &&
+        messagesReducer[routeReducer.roomId].length !== 1 &&
+        setTimeoutOn
+      ) {
+        setTimeoutOn = !setTimeoutOn
+        setTimeout(() => {
+          sendMessage({
+            author: "Robot",
+            message: `Здравствуйте ${lastMessageAuthor}!  Я робот,  не отвечайте мне.`,
+          })
+          setTimeoutOn = !setTimeoutOn
+        }, 500)
+      }
+    }
+  }, [messagesReducer, routeReducer.roomId, sendMessage])
 
   const value =
     conversationsReducer.find(
       (conversation) => conversation.title === routeReducer.roomId,
     )?.value || ""
-
-  const sendMessage = ({ author, message }) => {
-    const newMessage = { author, message }
-
-    if (!/^\s*$/.test(message) && author !== "Robot") {
-      dispatch(resetValueConversations(routeReducer))
-      dispatch(sendMessages(routeReducer, newMessage))
-    } else if (!/^\s*$/.test(message)) {
-      dispatch(sendMessages(routeReducer, newMessage))
-    }
-  }
 
   const onKeyPressHandler = React.useCallback(
     ({ code }) => {
@@ -54,13 +86,16 @@ export const MessageList = () => {
     [sendMessage, value],
   )
 
-  const handleChangeValue = (event) => {
-    const {
-      target: { value },
-    } = event
+  const handleChangeValue = useCallback(
+    (event) => {
+      const {
+        target: { value },
+      } = event
 
-    dispatch(changeValueConversations(routeReducer, value))
-  }
+      dispatch(changeValueConversations(routeReducer, value))
+    },
+    [dispatch, routeReducer],
+  )
 
   const InputButton = React.useCallback(() => {
     return (
@@ -102,38 +137,3 @@ export const MessageList = () => {
     </div>
   )
 }
-
-MessageList.propTypes = {
-  parentAction: PropTypes.object,
-  parentState: PropTypes.object,
-}
-
-/*React.useEffect(() => {
-  if (messagesList[params.roomId] !== undefined) {
-    const lastMessageAuthor =
-      messagesList[params.roomId][messagesList[params.roomId].length - 1]
-        .author
-
-    if (
-      lastMessageAuthor !== "Robot" &&
-      messagesList[params.roomId] !== SetMessagesList[params.roomId] &&
-      messagesList[params.roomId].length !== 1
-    ) {
-      setTimeout(
-        () =>
-          SetMessagesList({
-            ...messagesList,
-            [params.roomId]: [
-              ...messagesList[params.roomId],
-              {
-                author: "Robot",
-                message: `Здравствуйте ${lastMessageAuthor}!  Я робот,  не отвечайте мне.`,
-              },
-            ],
-          }),
-        500,
-      )
-    }
-  }
-}, [messagesList, params.roomId, SetMessagesList])
-*/

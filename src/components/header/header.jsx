@@ -1,10 +1,15 @@
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
-import React from "react"
+import React, { useCallback } from "react"
 import styles from "./header.module.css"
 
+const selector = () => {
+  return (state) => state
+}
+
 export const Header = () => {
-  const { routeReducer } = useSelector((state) => state)
+  const memoSelector = useCallback((state) => selector()(state), [])
+  const { routeReducer } = useSelector(memoSelector)
 
   return (
     <>

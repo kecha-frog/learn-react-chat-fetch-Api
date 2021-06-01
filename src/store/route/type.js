@@ -1,1 +1,1 @@
-export const ADD_PARAMS = "@route/addParam"
+export const ROUTE_PARAMS = "@route/addParam"

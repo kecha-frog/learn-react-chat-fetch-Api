@@ -3,13 +3,19 @@ import { List } from "@material-ui/core"
 import { addRoomConversations } from "@store/conversations"
 import { addRoomMessages } from "@store/messages"
 import { useSelector, useDispatch } from "react-redux"
-import React from "react"
+import React, { useCallback } from "react"
 import styles from "./chat-list.module.css"
 
+const selector = () => {
+  return (state) => state
+}
+
 export const ChatList = () => {
+  const memoSelector = useCallback((state) => selector()(state), [])
+
   const [selectedIndex, setSelectedIndex] = React.useState(0)
 
-  const { conversationsReducer } = useSelector((state) => state)
+  const { conversationsReducer } = useSelector(memoSelector)
 
   const dispatch = useDispatch()
 

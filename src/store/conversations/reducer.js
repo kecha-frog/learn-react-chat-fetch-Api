@@ -9,11 +9,40 @@ const initialState = [
   { title: "room2", value: "" },
 ]
 
-function randomInteger(min, max) {
-  const rand = min + Math.random() * (max + 1 - min)
-  return Math.floor(rand)
+const createReducer = (initialState, handlers) => {
+  return function reducer(state = initialState, action) {
+    if (handlers.hasOwnProperty(action.type)) {
+      return handlers[action.type](state, action)
+    }
+
+    return state
+  }
 }
 
+export const conversationsReducer = createReducer(initialState, {
+  [RESET_VALUE_CONVERSATIONS]: (state, action) =>
+    state.map((conversation) => {
+      if (action.roomId === conversation.title) {
+        return { ...conversation, value: "" }
+      }
+
+      return conversation
+    }),
+  [CHANGE_VALUE_CONVERSATIONS]: (state, action) =>
+    state.map((conversation) => {
+      if (action.roomId === conversation.title) {
+        return { ...conversation, value: action.value }
+      }
+
+      return conversation
+    }),
+  [ADD_ROOM_CONVERSATIONS]: (state) => [
+    ...state,
+    { title: `room${++state.length}`, value: "" },
+  ],
+})
+
+/*
 export function conversationsReducer(state = initialState, action) {
   switch (action.type) {
     case RESET_VALUE_CONVERSATIONS:
@@ -38,3 +67,4 @@ export function conversationsReducer(state = initialState, action) {
       return state
   }
 }
+*/

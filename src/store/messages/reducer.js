@@ -28,7 +28,7 @@ export const messagesReducer = createReducer(initialState, {
     [action.nameRoom]: [
       {
         author: "User",
-        message: `Привет!!! ${action.nameRoom}`,
+        message: `Привет. Это комната ${action.nameRoom}!`,
       },
     ],
   }),

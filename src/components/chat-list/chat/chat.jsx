@@ -13,6 +13,7 @@ const StyledListItem = withStyles(() => ({
       border: "1px groove",
       borderRightStyle: "none",
       display: "block",
+      maxHeight: "75px",
     },
   },
 }))(ListItem)
@@ -22,6 +23,20 @@ const StyledListItemTextAuthor = withStyles(() => ({
     "&": {
       fontSize: "15px",
       color: "#28A4E3",
+    },
+  },
+}))(ListItemText)
+
+const StyledListItemTextMessage = withStyles(() => ({
+  primary: {
+    "&": {
+      fontSize: "15px",
+      wordWrap: "break-word",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      display: "-webkit-box",
+      WebkitLineClamp: 1,
+      WebkitBoxOrient: "vertical",
     },
   },
 }))(ListItemText)
@@ -40,7 +55,7 @@ export const Chat = (props) => {
       <Link className={styles.link} to={"/chat/" + title}>
         <StyledListItem button={true} href={"#"} selected={roomId === title}>
           <StyledListItemTextAuthor primary={author} />
-          <ListItemText primary={message} />
+          <StyledListItemTextMessage primary={message} />
         </StyledListItem>
       </Link>
     </>

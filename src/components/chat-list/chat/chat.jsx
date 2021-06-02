@@ -14,17 +14,12 @@ const StyledListItem = withStyles(() => ({
 }))(ListItem)
 
 export const Chat = (props) => {
-  const { title, handleListItemClick, selected, index } = props
+  const { title, selected } = props
 
   return (
     <>
       <Link className={styles.link} to={"/chat/" + title}>
-        <StyledListItem
-          onClick={(event) => handleListItemClick(event, index)}
-          button={true}
-          href={"#"}
-          selected={selected}
-        >
+        <StyledListItem button={true} href={"#"} selected={selected}>
           <ListItemText primary={title} />
         </StyledListItem>
       </Link>
@@ -35,6 +30,4 @@ export const Chat = (props) => {
 Chat.propTypes = {
   title: PropTypes.string,
   selected: PropTypes.bool,
-  handleListItemClick: PropTypes.func,
-  index: PropTypes.number,
 }

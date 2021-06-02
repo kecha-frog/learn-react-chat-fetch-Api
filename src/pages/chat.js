@@ -6,20 +6,17 @@ export const Chat = () => {
   return (
     <>
       <Switch>
-        <Route path={"/"}>
-          <Header />
-        </Route>
-      </Switch>
-      <Switch>
         <Route path="/profile">
           <Profile />
         </Route>
       </Switch>
       <Switch>
-        <Route path={["/chat/:roomId", "/chat"]}>
-          {(params) => (
-            <Layout messageList={MessageList} chatList={ChatList} {...params} />
-          )}
+        <Route path={["/chat/:roomId", "/chat", "/"]}>
+          <Layout
+            messageList={<MessageList />}
+            chatList={<ChatList />}
+            header={<Header />}
+          />
         </Route>
       </Switch>
     </>

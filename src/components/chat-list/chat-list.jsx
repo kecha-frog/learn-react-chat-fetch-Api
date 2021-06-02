@@ -3,13 +3,14 @@ import { List } from "@material-ui/core"
 import { addRoomConversations, getChatList } from "@store/conversations"
 import { addRoomMessages } from "@store/messages"
 import { useSelector, useDispatch } from "react-redux"
+import { useParams } from "react-router-dom"
 import React, { useMemo } from "react"
 import styles from "./chat-list.module.css"
 
 export const ChatList = () => {
   const memoSelector = useMemo(() => getChatList(), [])
 
-  const [selectedIndex, setSelectedIndex] = React.useState(0)
+  const { roomId } = useParams()
 
   const chatList = useSelector(memoSelector)
 
@@ -20,10 +21,6 @@ export const ChatList = () => {
     dispatch(addRoomMessages())
   }
 
-  const handleListItemClick = (event, index) => {
-    setSelectedIndex(index)
-  }
-
   return (
     <List
       aria-label="contacts"
@@ -32,11 +29,9 @@ export const ChatList = () => {
     >
       {chatList.map((conversation, index) => (
         <Chat
-          handleListItemClick={handleListItemClick}
           title={conversation.title}
           key={index}
-          index={index}
-          selected={selectedIndex === index}
+          selected={roomId === conversation.title}
         />
       ))}
       <li>

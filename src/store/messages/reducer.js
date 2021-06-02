@@ -1,5 +1,4 @@
 import { SEND_MESSAGES, ADD_ROOM_MESSAGES } from "@store/messages/type"
-import { ADD_FUNC } from "@store/func/type"
 
 const initialState = {
   room1: [

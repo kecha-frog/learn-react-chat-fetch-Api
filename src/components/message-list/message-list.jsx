@@ -7,8 +7,8 @@ import {
   resetValueConversations,
 } from "@store/conversations"
 import { getMessageList, sendMessages } from "@store/messages"
-import { getRouteParams } from "@store/route"
 import { useSelector, useDispatch } from "react-redux"
+import { useParams } from "react-router-dom"
 import React, { useEffect, useCallback, useMemo } from "react"
 import styles from "./message-list.module.css"
 
@@ -28,12 +28,12 @@ getMessageList()
 export const MessageList = () => {
   const memoSelectorMessageList = useMemo(() => getMessageList(), [])
   const MessageList = useSelector(memoSelectorMessageList)
-  const memoSelectorRouteParams = useMemo(() => getRouteParams(), [])
-  const RouteParams = useSelector(memoSelectorRouteParams)
   const memoSelectorChatList = useMemo(() => getChatList(), [])
   const ChatList = useSelector(memoSelectorChatList)
 
-  const messages = MessageList[RouteParams.roomId] || []
+  const { roomId } = useParams()
+
+  const messages = MessageList[roomId] || []
 
   const dispatch = useDispatch()
 
@@ -42,25 +42,23 @@ export const MessageList = () => {
       const newMessage = { author, message }
 
       if (!/^\s*$/.test(message) && author !== "Robot") {
-        dispatch(sendMessages(RouteParams, newMessage))
-        dispatch(resetValueConversations(RouteParams))
+        dispatch(sendMessages(roomId, newMessage))
+        dispatch(resetValueConversations(roomId))
       } else if (!/^\s*$/.test(message)) {
-        dispatch(sendMessages(RouteParams, newMessage))
+        dispatch(sendMessages(roomId, newMessage))
       }
     },
-    [dispatch, RouteParams],
+    [dispatch, roomId],
   )
 
   useEffect(() => {
-    if (MessageList[RouteParams.roomId] !== undefined) {
+    if (MessageList[roomId] !== undefined) {
       const lastMessageAuthor =
-        MessageList[RouteParams.roomId][
-          MessageList[RouteParams.roomId].length - 1
-        ].author
+        MessageList[roomId][MessageList[roomId].length - 1].author
 
       if (
         lastMessageAuthor !== "Robot" &&
-        MessageList[RouteParams.roomId].length !== 1 &&
+        MessageList[roomId].length !== 1 &&
         setTimeoutOn
       ) {
         setTimeoutOn = !setTimeoutOn
@@ -73,11 +71,10 @@ export const MessageList = () => {
         }, 500)
       }
     }
-  }, [MessageList, RouteParams.roomId, sendMessage])
+  }, [MessageList, roomId, sendMessage])
 
   const value =
-    ChatList.find((conversation) => conversation.title === RouteParams.roomId)
-      ?.value || ""
+    ChatList.find((conversation) => conversation.title === roomId)?.value || ""
 
   const onKeyPressHandler = React.useCallback(
     ({ code }) => {
@@ -94,9 +91,9 @@ export const MessageList = () => {
         target: { value },
       } = event
 
-      dispatch(changeValueConversations(RouteParams, value))
+      dispatch(changeValueConversations(roomId, value))
     },
-    [dispatch, RouteParams],
+    [dispatch, roomId],
   )
 
   const InputButton = React.useCallback(() => {

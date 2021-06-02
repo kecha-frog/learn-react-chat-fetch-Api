@@ -1,16 +1,25 @@
 import "./index.css"
-import { Layout, MessageList, ChatList } from "@components"
+import { Chat } from "@app/pages"
+import { store } from "@store"
 import ReactDom from "react-dom"
+import { Provider } from "react-redux"
 import { BrowserRouter } from "react-router-dom"
 import React from "react"
 
 const App = () => {
-  return <Layout messageList={MessageList} chatList={ChatList} />
+  return (
+    <>
+      <Chat />
+    </>
+  )
 }
 
 ReactDom.render(
   <BrowserRouter>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </BrowserRouter>,
+
   document.getElementById("root"),
 )

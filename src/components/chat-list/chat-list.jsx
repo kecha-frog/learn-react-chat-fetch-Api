@@ -1,50 +1,45 @@
 import { Chat } from "@components"
 import { List } from "@material-ui/core"
-import PropTypes from "prop-types"
+import { addRoomConversations } from "@store/conversations"
+import { addRoomMessages } from "@store/messages"
+import { useSelector, useDispatch } from "react-redux"
 import React from "react"
 import styles from "./chat-list.module.css"
 
-export class ChatList extends React.Component {
-  state = {
-    selectedIndex: 0,
+export const ChatList = () => {
+  const [selectedIndex, setSelectedIndex] = React.useState(0)
+
+  const { conversationsReducer } = useSelector((state) => state)
+
+  const dispatch = useDispatch()
+
+  const addRoom = () => {
+    dispatch(addRoomConversations())
+    dispatch(addRoomMessages())
   }
 
-  static propTypes = {
-    parentState: PropTypes.object,
-    parentAction: PropTypes.object,
+  const handleListItemClick = (event, index) => {
+    setSelectedIndex(index)
   }
 
-  handleListItemClick = (event, index) => {
-    this.setState({
-      selectedIndex: index,
-    })
-  }
-
-  render() {
-    const { parentState } = this.props
-    const { conversations } = parentState
-
-    const { parentAction } = this.props
-    const { addRoom } = parentAction
-    return (
-      <List
-        aria-label="contacts"
-        className={styles.chat_list}
-        disablePadding={true}
-      >
-        {conversations.map((conversation, index) => (
-          <Chat
-            handleListItemClick={this.handleListItemClick}
-            title={conversation.title}
-            key={index}
-            index={index}
-            selected={this.state.selectedIndex === index}
-          />
-        ))}
-        <li>
-          <button onClick={addRoom}>Добавить</button>
-        </li>
-      </List>
-    )
-  }
+  return (
+    <List
+      aria-label="contacts"
+      className={styles.chat_list}
+      disablePadding={true}
+    >
+      {conversationsReducer.map((conversation, index) => (
+        <Chat
+          handleListItemClick={handleListItemClick}
+          title={conversation.title}
+          key={index}
+          index={index}
+          selected={selectedIndex === index}
+        />
+      ))}
+      <li>
+        <button onClick={addRoom}>Добавить</button>
+      </li>
+    </List>
+  )
 }

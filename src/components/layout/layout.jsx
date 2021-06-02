@@ -1,44 +1,34 @@
-import { Header, MessageTransfer } from "@components"
+import { addParams } from "@store/route"
 import PropTypes from "prop-types"
-import { Switch, Route, Link } from "react-router-dom"
+import { useDispatch } from "react-redux"
 import React from "react"
 import styles from "./layout.module.css"
 
-export class Layout extends React.Component {
-  static propTypes = {
-    chatList: PropTypes.func,
-    messageList: PropTypes.func,
-  }
+export const Layout = (props) => {
+  const Header = props.header
+  const ChatList = props.chatList
+  const MessageList = props.messageList
 
-  render() {
-    const ChatList = this.props.chatList
-    const MessageList = this.props.messageList
+  const { match } = props
+  const { params } = match
 
-    return (
-      <div>
-        <Switch>
-          <Route path={"/"}>
-            <Link to="/chat/room1">Chat</Link>
-          </Route>
-        </Switch>
-        <Switch>
-          <Route path={["/chat/:roomId"]}>
-            {(params) => (
-              <MessageTransfer {...params}>
-                {(state, actions, params) => (
-                  <>
-                    <Header parentParams={params} />
-                    <div className={styles.messenger}>
-                      <ChatList parentState={state} parentAction={actions} />
-                      <MessageList parentState={state} parentAction={actions} />
-                    </div>
-                  </>
-                )}
-              </MessageTransfer>
-            )}
-          </Route>
-        </Switch>
+  const dispatch = useDispatch()
+  dispatch(addParams(params))
+
+  return (
+    <>
+      <Header />
+      <div className={styles.messenger}>
+        <ChatList />
+        <MessageList />
       </div>
-    )
-  }
+    </>
+  )
+}
+
+Layout.propTypes = {
+  chatList: PropTypes.func,
+  messageList: PropTypes.func,
+  header: PropTypes.func,
+  match: PropTypes.object,
 }

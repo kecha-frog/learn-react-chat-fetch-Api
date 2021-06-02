@@ -4,8 +4,10 @@
 
 .messagesList{
     overflow: auto;
-    padding: 2px 5px ;
+    padding: 5px ;
     height: 700px;
+    list-style-type: none;
+    margin: 0;
 }
 
 .icon{

@@ -12,6 +12,6 @@ export const changeValueConversations = (roomId, value) => {
   return { type: CHANGE_VALUE_CONVERSATIONS, roomId, value }
 }
 
-export const addRoomConversations = () => {
-  return { type: ADD_ROOM_CONVERSATIONS }
+export const addRoomConversations = (nameRoom) => {
+  return { type: ADD_ROOM_CONVERSATIONS, nameRoom }
 }

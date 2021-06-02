@@ -1,11 +1,11 @@
 import { SEND_MESSAGES, ADD_ROOM_MESSAGES } from "@store/messages/type"
 
 const initialState = {
-  room1: [
+  aaJa: [
     { author: "User", message: "Привет !" },
     { author: "Robot", message: "Ау !" },
   ],
-  room2: [{ author: "User", message: "Привет room2!" }],
+  bF12: [{ author: "User", message: "Привет room2!" }],
 }
 
 const createReducer = (initialState, handlers) => {
@@ -23,12 +23,12 @@ export const messagesReducer = createReducer(initialState, {
     ...state,
     [action.roomId]: [...(state[action.roomId] || []), action.newMessage],
   }),
-  [ADD_ROOM_MESSAGES]: (state) => ({
+  [ADD_ROOM_MESSAGES]: (state, action) => ({
     ...state,
-    [`room${++Object.keys(state).length}`]: [
+    [action.nameRoom]: [
       {
         author: "User",
-        message: `Привет room${++Object.keys(state).length}!`,
+        message: `Привет!!! ${action.nameRoom}`,
       },
     ],
   }),

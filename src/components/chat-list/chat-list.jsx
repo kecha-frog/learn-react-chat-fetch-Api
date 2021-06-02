@@ -2,23 +2,24 @@ import { Chat } from "@components"
 import { List } from "@material-ui/core"
 import { addRoomConversations, getChatList } from "@store/conversations"
 import { addRoomMessages } from "@store/messages"
+import { nanoid } from "nanoid"
 import { useSelector, useDispatch } from "react-redux"
-import { useParams } from "react-router-dom"
 import React, { useMemo } from "react"
 import styles from "./chat-list.module.css"
 
 export const ChatList = () => {
   const memoSelector = useMemo(() => getChatList(), [])
-
-  const { roomId } = useParams()
-
   const chatList = useSelector(memoSelector)
 
   const dispatch = useDispatch()
 
   const addRoom = () => {
-    dispatch(addRoomConversations())
-    dispatch(addRoomMessages())
+    const nameRoom = nanoid(4)
+
+    if (chatList.map((chat) => chat.title !== nameRoom)) {
+      dispatch(addRoomConversations(nameRoom))
+      dispatch(addRoomMessages(nameRoom))
+    }
   }
 
   return (
@@ -28,11 +29,7 @@ export const ChatList = () => {
       disablePadding={true}
     >
       {chatList.map((conversation, index) => (
-        <Chat
-          title={conversation.title}
-          key={index}
-          selected={roomId === conversation.title}
-        />
+        <Chat title={conversation.title} key={index} />
       ))}
       <li>
         <button onClick={addRoom}>Добавить</button>

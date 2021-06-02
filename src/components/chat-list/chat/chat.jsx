@@ -1,7 +1,10 @@
 import { ListItem, ListItemText, withStyles } from "@material-ui/core"
+import { getMessageList } from "@store/messages"
 import PropTypes from "prop-types"
-import { Link } from "react-router-dom"
-import React from "react"
+
+import { useSelector } from "react-redux"
+import { Link, useParams } from "react-router-dom"
+import React, { useMemo } from "react"
 import styles from "./chat.module.css"
 
 const StyledListItem = withStyles(() => ({
@@ -9,18 +12,35 @@ const StyledListItem = withStyles(() => ({
     "&": {
       border: "1px groove",
       borderRightStyle: "none",
+      display: "block",
     },
   },
 }))(ListItem)
 
+const StyledListItemTextAuthor = withStyles(() => ({
+  primary: {
+    "&": {
+      fontSize: "15px",
+      color: "#28A4E3",
+    },
+  },
+}))(ListItemText)
+
 export const Chat = (props) => {
-  const { title, selected } = props
+  const memoSelectorMessageList = useMemo(() => getMessageList(), [])
+  const MessageList = useSelector(memoSelectorMessageList)
+
+  const { roomId } = useParams()
+
+  const { title } = props
+  const { author, message } = MessageList[title][MessageList[title].length - 1]
 
   return (
     <>
       <Link className={styles.link} to={"/chat/" + title}>
-        <StyledListItem button={true} href={"#"} selected={selected}>
-          <ListItemText primary={title} />
+        <StyledListItem button={true} href={"#"} selected={roomId === title}>
+          <StyledListItemTextAuthor primary={author} />
+          <ListItemText primary={message} />
         </StyledListItem>
       </Link>
     </>

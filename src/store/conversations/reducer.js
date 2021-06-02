@@ -5,8 +5,8 @@ import {
 } from "@store/conversations/type"
 
 const initialState = [
-  { title: "room1", value: "" },
-  { title: "room2", value: "" },
+  { title: "aaJa", value: "" },
+  { title: "bF12", value: "" },
 ]
 
 const createReducer = (initialState, handlers) => {
@@ -36,9 +36,9 @@ export const conversationsReducer = createReducer(initialState, {
 
       return conversation
     }),
-  [ADD_ROOM_CONVERSATIONS]: (state) => [
+  [ADD_ROOM_CONVERSATIONS]: (state, action) => [
     ...state,
-    { title: `room${++state.length}`, value: "" },
+    { title: action.nameRoom, value: "" },
   ],
 })
 

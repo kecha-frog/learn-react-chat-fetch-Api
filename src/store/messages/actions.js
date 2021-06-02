@@ -4,6 +4,6 @@ export const sendMessages = (roomId, newMessage) => {
   return { type: SEND_MESSAGES, roomId, newMessage }
 }
 
-export const addRoomMessages = () => {
-  return { type: ADD_ROOM_MESSAGES }
+export const addRoomMessages = (nameRoom) => {
+  return { type: ADD_ROOM_MESSAGES, nameRoom }
 }

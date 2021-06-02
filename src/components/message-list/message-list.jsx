@@ -3,7 +3,7 @@ import { Input, InputAdornment, withStyles } from "@material-ui/core"
 import { Send } from "@material-ui/icons"
 import {
   changeValueConversations,
-  getChatList,
+  getChatValue,
   resetValueConversations,
 } from "@store/conversations"
 import { getMessageList, sendMessages } from "@store/messages"
@@ -23,13 +23,9 @@ const StyledInput = withStyles(() => ({
 
 let setTimeoutOn = true // Cделал для ответа робота чтоб много раз не отправлял повторно когда setTimeout скапливается в стеке, его надо в редукс переносить ?
 
-getMessageList()
-
 export const MessageList = () => {
   const memoSelectorMessageList = useMemo(() => getMessageList(), [])
   const MessageList = useSelector(memoSelectorMessageList)
-  const memoSelectorChatList = useMemo(() => getChatList(), [])
-  const ChatList = useSelector(memoSelectorChatList)
 
   const { roomId } = useParams()
 
@@ -73,8 +69,8 @@ export const MessageList = () => {
     }
   }, [MessageList, roomId, sendMessage])
 
-  const value =
-    ChatList.find((conversation) => conversation.title === roomId)?.value || ""
+  const memoSelectorValue = useMemo(() => getChatValue(roomId), [roomId])
+  const value = useSelector(memoSelectorValue)
 
   const onKeyPressHandler = React.useCallback(
     ({ code }) => {

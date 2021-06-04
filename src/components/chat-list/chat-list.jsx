@@ -1,25 +1,25 @@
 import { Chat } from "@components"
 import { List } from "@material-ui/core"
-import { addRoomConversations } from "@store/conversations"
+import { addRoomConversations, getChatList } from "@store/conversations"
 import { addRoomMessages } from "@store/messages"
+import { nanoid } from "nanoid"
 import { useSelector, useDispatch } from "react-redux"
-import React from "react"
+import React, { useMemo } from "react"
 import styles from "./chat-list.module.css"
 
 export const ChatList = () => {
-  const [selectedIndex, setSelectedIndex] = React.useState(0)
-
-  const { conversationsReducer } = useSelector((state) => state)
+  const memoSelector = useMemo(() => getChatList(), [])
+  const chatList = useSelector(memoSelector)
 
   const dispatch = useDispatch()
 
   const addRoom = () => {
-    dispatch(addRoomConversations())
-    dispatch(addRoomMessages())
-  }
+    const nameRoom = nanoid(4)
 
-  const handleListItemClick = (event, index) => {
-    setSelectedIndex(index)
+    if (chatList.map((chat) => chat.title !== nameRoom)) {
+      dispatch(addRoomConversations(nameRoom))
+      dispatch(addRoomMessages(nameRoom))
+    }
   }
 
   return (
@@ -28,14 +28,8 @@ export const ChatList = () => {
       className={styles.chat_list}
       disablePadding={true}
     >
-      {conversationsReducer.map((conversation, index) => (
-        <Chat
-          handleListItemClick={handleListItemClick}
-          title={conversation.title}
-          key={index}
-          index={index}
-          selected={selectedIndex === index}
-        />
+      {chatList.map((conversation, index) => (
+        <Chat title={conversation.title} key={index} />
       ))}
       <li>
         <button onClick={addRoom}>Добавить</button>

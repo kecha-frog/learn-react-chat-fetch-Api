@@ -25,3 +25,11 @@
     list-style-type: none;
     margin: 0;
 }
+
+.noMessage{
+    height: 700px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    opacity: 30%;
+}

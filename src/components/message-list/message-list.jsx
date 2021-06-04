@@ -117,14 +117,25 @@ export const MessageList = () => {
     )
   }, [handleChangeValue, onKeyPressHandler, sendMessage, value])
 
-  return (
-    <div className={styles.messagesListBox}>
-      <ul className={styles.messagesList}>
-        {messages.map((message, index) => (
-          <Message messages={message} key={index} />
-        ))}
-      </ul>
-      <InputButton />
-    </div>
-  )
+  if (MessageList[roomId]) {
+    return (
+      <div className={styles.messagesListBox}>
+        <ul className={styles.messagesList}>
+          {messages.map((message, index) => (
+            <Message messages={message} key={index} />
+          ))}
+        </ul>
+        <InputButton />
+      </div>
+    )
+  } else {
+    return (
+      <>
+        <div className={styles.messagesListBox}>
+          <h3 className={styles.noMessage}>No message</h3>
+          <InputButton />
+        </div>
+      </>
+    )
+  }
 }

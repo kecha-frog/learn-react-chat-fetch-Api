@@ -8,7 +8,7 @@ export const Header = () => {
   return (
     <>
       <header className={styles.header}>
-        <h3 className={styles.text}>{roomId}</h3>
+        <h3 className={styles.text}>room #{roomId}</h3>
         <Link to="/profile">Profile</Link>
       </header>
     </>

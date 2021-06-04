@@ -17,8 +17,7 @@ export const ChatList = () => {
     const nameRoom = nanoid(4)
 
     if (chatList.map((chat) => chat.title !== nameRoom)) {
-      dispatch(addRoomConversations(nameRoom))
-      dispatch(addRoomMessages(nameRoom))
+      dispatch(addRoomConversations({ nameRoom }))
     }
   }
 

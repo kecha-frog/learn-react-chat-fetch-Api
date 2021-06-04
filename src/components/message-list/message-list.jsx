@@ -38,10 +38,10 @@ export const MessageList = () => {
       const newMessage = { author, message }
 
       if (!/^\s*$/.test(message) && author !== "Robot") {
-        dispatch(sendMessages(roomId, newMessage))
-        dispatch(resetValueConversations(roomId))
+        dispatch(sendMessages({ roomId, newMessage }))
+        dispatch(resetValueConversations({ roomId }))
       } else if (!/^\s*$/.test(message)) {
-        dispatch(sendMessages(roomId, newMessage))
+        dispatch(sendMessages({ roomId, newMessage }))
       }
     },
     [dispatch, roomId],
@@ -52,16 +52,12 @@ export const MessageList = () => {
       const lastMessageAuthor =
         MessageList[roomId][MessageList[roomId].length - 1].author
 
-      if (
-        lastMessageAuthor !== "Robot" &&
-        MessageList[roomId].length !== 1 &&
-        setTimeoutOn
-      ) {
+      if (lastMessageAuthor !== "Robot" && setTimeoutOn) {
         setTimeoutOn = !setTimeoutOn
         setTimeout(() => {
           sendMessage({
             author: "Robot",
-            message: `Здравствуйте ${lastMessageAuthor}!  Я робот,  не отвечайте мне.`,
+            message: `Здравствуйте ${lastMessageAuthor}!  Я робот комнаты #${roomId},  не отвечайте мне.`,
           })
           setTimeoutOn = !setTimeoutOn
         }, 500)
@@ -87,7 +83,7 @@ export const MessageList = () => {
         target: { value },
       } = event
 
-      dispatch(changeValueConversations(roomId, value))
+      dispatch(changeValueConversations({ roomId, value }))
     },
     [dispatch, roomId],
   )

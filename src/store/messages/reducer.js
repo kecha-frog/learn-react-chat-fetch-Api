@@ -1,4 +1,4 @@
-import { SEND_MESSAGES, ADD_ROOM_MESSAGES } from "@store/messages/type"
+import { SEND_MESSAGES } from "@store/messages/type"
 
 const initialState = {
   aaJa: [
@@ -22,15 +22,6 @@ export const messagesReducer = createReducer(initialState, {
   [SEND_MESSAGES]: (state, action) => ({
     ...state,
     [action.roomId]: [...(state[action.roomId] || []), action.newMessage],
-  }),
-  [ADD_ROOM_MESSAGES]: (state, action) => ({
-    ...state,
-    [action.nameRoom]: [
-      {
-        author: "User",
-        message: `Привет. Это комната ${action.nameRoom}!`,
-      },
-    ],
   }),
 })
 

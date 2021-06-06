@@ -4,18 +4,17 @@ import {
   ADD_ROOM_CONVERSATIONS,
 } from "@store/conversations/type"
 
-export const resetValueConversations = (payload) => {
-  return { type: RESET_VALUE_CONVERSATIONS, roomId: payload.roomId }
+export const resetValueConversations = (roomId) => {
+  return { type: RESET_VALUE_CONVERSATIONS, payload: { roomId } }
 }
 
-export const changeValueConversations = (payload) => {
+export const changeValueConversations = (roomId, value) => {
   return {
     type: CHANGE_VALUE_CONVERSATIONS,
-    roomId: payload.roomId,
-    value: payload.value,
+    payload: { roomId, value },
   }
 }
 
-export const addRoomConversations = (payload) => {
-  return { type: ADD_ROOM_CONVERSATIONS, nameRoom: payload.nameRoom }
+export const addRoomConversations = (nameRoom) => {
+  return { type: ADD_ROOM_CONVERSATIONS, payload: { nameRoom } }
 }

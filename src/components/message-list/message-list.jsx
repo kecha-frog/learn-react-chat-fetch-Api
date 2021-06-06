@@ -38,10 +38,10 @@ export const MessageList = () => {
       const newMessage = { author, message }
 
       if (!/^\s*$/.test(message) && author !== "Robot") {
-        dispatch(sendMessages({ roomId, newMessage }))
-        dispatch(resetValueConversations({ roomId }))
+        dispatch(sendMessages(roomId, newMessage))
+        dispatch(resetValueConversations(roomId))
       } else if (!/^\s*$/.test(message)) {
-        dispatch(sendMessages({ roomId, newMessage }))
+        dispatch(sendMessages(roomId, newMessage))
       }
     },
     [dispatch, roomId],
@@ -83,7 +83,7 @@ export const MessageList = () => {
         target: { value },
       } = event
 
-      dispatch(changeValueConversations({ roomId, value }))
+      dispatch(changeValueConversations(roomId, value))
     },
     [dispatch, roomId],
   )

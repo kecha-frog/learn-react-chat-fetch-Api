@@ -21,7 +21,10 @@ const createReducer = (initialState, handlers) => {
 export const messagesReducer = createReducer(initialState, {
   [SEND_MESSAGES]: (state, action) => ({
     ...state,
-    [action.roomId]: [...(state[action.roomId] || []), action.newMessage],
+    [action.payload.roomId]: [
+      ...(state[action.payload.roomId] || []),
+      action.payload.newMessage,
+    ],
   }),
 })
 

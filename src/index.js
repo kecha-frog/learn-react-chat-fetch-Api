@@ -23,3 +23,11 @@ ReactDom.render(
 
   document.getElementById("root"),
 )
+
+/*const App = () => {
+  return (
+    <>
+      <Chat />
+    </>
+  )
+}*/

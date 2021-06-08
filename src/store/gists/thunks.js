@@ -3,7 +3,6 @@ import {
   getGistsRequest,
   getGistsSuccess,
 } from "@store/gists/action"
-import debounce from "lodash.debounce"
 
 const API_URL_PUBLIC = "https://api.github.com/gists/public?page20&per_page=5"
 const API_URL_SEARCH_GIST = (name) =>
@@ -39,7 +38,7 @@ export const getAllGistsByUserName = (value, ref) => async (dispatch) => {
       console.log(value)
       console.log(ref)
 
-      if (res.ok /*&& isCurrentQuery*/) {
+      if (res.ok && isCurrentQuery) {
         if (result.length !== 0) {
           dispatch(getGistsSuccess(result))
         } else {

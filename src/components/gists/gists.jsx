@@ -10,6 +10,7 @@ import {
 } from "@store/gists"
 import { useDispatch, useSelector } from "react-redux"
 import React, { useEffect, useMemo, useRef } from "react"
+import debounce from "lodash.debounce"
 
 export const Gists = () => {
   const gists = useMemo(() => getGistsList(), [])
@@ -27,14 +28,14 @@ export const Gists = () => {
   const { gistsList, pending } = useSelector(gists)
   const dispatch = useDispatch()*/ //TODO Почему такой код не рендерит ?
 
-  const handleChangeValue = (value) => {
+  const handleChangeValue = debounce((value) => {
     dispatch(getGistsSendValue(value))
-  }
+  }, 500)
 
   useEffect(() => {
+    ref.current = value
     dispatch(getAllGistsByUserName(value, ref.current))
     /*dispatch(getAllGists())*/
-    ref.current = value
   }, [dispatch, value])
 
   if (error) {
@@ -47,7 +48,7 @@ export const Gists = () => {
       <input
         placeholder={"Search..."}
         onChange={(e) => handleChangeValue(e.target.value)}
-        value={value}
+        /*value={value}*/
         type="text"
       />
       {pending ? (

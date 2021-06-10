@@ -43,7 +43,7 @@ const StyledListItemTextMessage = withStyles(() => ({
 
 export const Chat = (props) => {
   const memoSelectorMessageList = useMemo(() => getMessageList(), [])
-  const MessageList = useSelector(memoSelectorMessageList)
+  const messageList = useSelector(memoSelectorMessageList)
 
   const { roomId } = useParams()
 
@@ -51,9 +51,9 @@ export const Chat = (props) => {
 
   const room = `Room #${title}`
 
-  if (MessageList[title] !== undefined) {
+  if (messageList[title] !== undefined) {
     const { author, message } =
-      MessageList[title][MessageList[title]?.length - 1]
+      messageList[title][messageList[title]?.length - 1]
 
     return (
       <>
@@ -69,20 +69,19 @@ export const Chat = (props) => {
         </Link>
       </>
     )
-  } else {
-    const noMessage = `No message`
-
-    return (
-      <>
-        <Link className={styles.link} to={"/chat/" + title}>
-          <StyledListItem button={true} href={"#"} selected={roomId === title}>
-            <StyledListItemTextAuthor primary={room} />
-            <StyledListItemTextMessage primary={noMessage} />
-          </StyledListItem>
-        </Link>
-      </>
-    )
   }
+  const noMessage = `No message`
+
+  return (
+    <>
+      <Link className={styles.link} to={"/chat/" + title}>
+        <StyledListItem button={true} href={"#"} selected={roomId === title}>
+          <StyledListItemTextAuthor primary={room} />
+          <StyledListItemTextMessage primary={noMessage} />
+        </StyledListItem>
+      </Link>
+    </>
+  )
 }
 
 Chat.propTypes = {

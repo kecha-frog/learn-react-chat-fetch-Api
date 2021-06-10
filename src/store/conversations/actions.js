@@ -5,7 +5,7 @@ import {
 } from "@store/conversations/type"
 
 export const resetValueConversations = (roomId) => {
-  return { type: RESET_VALUE_CONVERSATIONS, payload: { roomId } }
+  return { type: RESET_VALUE_CONVERSATIONS, payload: roomId }
 }
 
 export const changeValueConversations = (roomId, value) => {
@@ -16,5 +16,5 @@ export const changeValueConversations = (roomId, value) => {
 }
 
 export const addRoomConversations = (nameRoom) => {
-  return { type: ADD_ROOM_CONVERSATIONS, payload: { nameRoom } }
+  return { type: ADD_ROOM_CONVERSATIONS, payload: nameRoom }
 }

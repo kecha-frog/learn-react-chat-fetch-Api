@@ -7,7 +7,7 @@ import {
 
 export const initialState = {
   gists: [],
-  err: null,
+  error: null,
   pending: false,
   value: "",
 }
@@ -23,13 +23,15 @@ export const gistsReducer = (state = initialState, action) => {
       return {
         ...state,
         gists: action.payload,
+        error: null,
         pending: false,
       }
     case GET_GISTS_FAILURE:
       return {
         ...state,
-        pending: false,
+        gists: [],
         error: action.payload,
+        pending: false,
       }
     case GET_GISTS_CHANGE_VALUE:
       return {

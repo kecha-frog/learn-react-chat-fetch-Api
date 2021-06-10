@@ -1,32 +1,16 @@
 import {
-  /*getGists,*/
-  getAllGists,
   getAllGistsByUserName,
-  getGistsError,
-  getGistsList,
-  getGistsPending,
+  getGists,
   getGistsSendValue,
-  getGistsValue,
 } from "@store/gists"
-import { useDispatch, useSelector } from "react-redux"
-import React, { useEffect, useMemo, useRef } from "react"
 import debounce from "lodash.debounce"
+import { useDispatch, useSelector } from "react-redux"
+import React, { useEffect, useRef } from "react"
 
 export const Gists = () => {
-  const gists = useMemo(() => getGistsList(), [])
-  const gistsList = useSelector(gists)
-  const gistsPending = useMemo(() => getGistsPending(), [])
-  const pending = useSelector(gistsPending)
-  const gistsValue = useMemo(() => getGistsValue(), [])
-  const value = useSelector(gistsValue)
-  const gistsError = useMemo(() => getGistsError(), [])
-  const error = useSelector(gistsError)
+  const { gists, error, pending, value } = useSelector(getGists())
   const dispatch = useDispatch()
   const ref = useRef("")
-
-  /*  const gists = useMemo(() => getGists(), [])
-  const { gistsList, pending } = useSelector(gists)
-  const dispatch = useDispatch()*/ //TODO Почему такой код не рендерит ?
 
   const handleChangeValue = debounce((value) => {
     dispatch(getGistsSendValue(value))
@@ -38,24 +22,20 @@ export const Gists = () => {
     /*dispatch(getAllGists())*/
   }, [dispatch, value])
 
-  if (error) {
-    return <h1>Error oops!</h1>
-  }
-
   return (
     <>
       <h1>Gists</h1>
       <input
         placeholder={"Search..."}
         onChange={(e) => handleChangeValue(e.target.value)}
-        /*value={value}*/
         type="text"
       />
-      {pending ? (
+      {error ? <h1>{error}</h1> : null}
+      {pending && !error ? (
         <h3>Обрабатывается fetch</h3>
       ) : (
         <ul>
-          {gistsList?.map((item, index) => (
+          {gists?.map((item, index) => (
             <li key={index}>{item.description || "Нет Описания"}</li>
           ))}
         </ul>

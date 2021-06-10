@@ -20,8 +20,8 @@ export const getAllGists = () => async (dispatch) => {
     const result = await res.json()
 
     dispatch(getGistsSuccess(result))
-  } catch (err) {
-    dispatch(getGistsFailure(err.message))
+  } catch (error) {
+    dispatch(getGistsFailure(error.message))
   }
 }
 
@@ -35,20 +35,17 @@ export const getAllGistsByUserName = (value, ref) => async (dispatch) => {
       const res = await fetch(API_URL_SEARCH_GIST(value))
       const result = await res.json()
 
-      console.log(value)
-      console.log(ref)
-
-      if (res.ok && isCurrentQuery) {
-        if (result.length !== 0) {
-          dispatch(getGistsSuccess(result))
-        } else {
-          dispatch(getGistsSuccess([{ description: "У юзера нет гистов!" }]))
-        }
+      if (res.ok && isCurrentQuery && result.length !== 0) {
+        dispatch(getGistsSuccess(result))
       } else {
-        dispatch(getGistsSuccess([{ description: "Такого юзера нет!" }]))
+        if (res.status === 404) {
+          dispatch(getGistsFailure("Такого юзера нет!"))
+        } else if (result.length === 0) {
+          dispatch(getGistsFailure("У юзера нет гистов!"))
+        }
       }
-    } catch (err) {
-      dispatch(getGistsFailure(err.message))
+    } catch (error) {
+      dispatch(getGistsFailure(error.message))
     }
   }
 }
@@ -65,8 +62,8 @@ export const getAllGistsByUserName = (value, ref) => async (dispatch) => {
 
       const result = await res.json()
       dispatch(getGistsSuccess(result))
-    } catch (err) {
-      dispatch(getGistsFailure(err.message))
+    } catch (error) {
+      dispatch(getGistsFailure(error.message))
     }
   }
 }*/

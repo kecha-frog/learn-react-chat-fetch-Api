@@ -22,7 +22,7 @@ const createReducer = (initialState, handlers) => {
 export const conversationsReducer = createReducer(initialState, {
   [RESET_VALUE_CONVERSATIONS]: (state, action) =>
     state.map((conversation) => {
-      if (action.payload.roomId === conversation.title) {
+      if (action.payload === conversation.title) {
         return { ...conversation, value: "" }
       }
 
@@ -38,7 +38,7 @@ export const conversationsReducer = createReducer(initialState, {
     }),
   [ADD_ROOM_CONVERSATIONS]: (state, action) => [
     ...state,
-    { title: action.payload.nameRoom, value: "" },
+    { title: action.payload, value: "" },
   ],
 })
 

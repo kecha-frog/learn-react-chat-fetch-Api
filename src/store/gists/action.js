@@ -14,9 +14,9 @@ export const getGistsSuccess = (data) => ({
   payload: data,
 })
 
-export const getGistsFailure = (err) => ({
+export const getGistsFailure = (error) => ({
   type: GET_GISTS_FAILURE,
-  payload: err,
+  payload: error,
 })
 
 export const getGistsSendValue = (value) => ({

@@ -1,7 +1,6 @@
 import { Chat } from "@components"
 import { List } from "@material-ui/core"
 import { addRoomConversations, getChatList } from "@store/conversations"
-import { addRoomMessages } from "@store/messages"
 import { nanoid } from "nanoid"
 import { useSelector, useDispatch } from "react-redux"
 import React, { useMemo } from "react"
@@ -18,7 +17,6 @@ export const ChatList = () => {
 
     if (chatList.map((chat) => chat.title !== nameRoom)) {
       dispatch(addRoomConversations(nameRoom))
-      dispatch(addRoomMessages(nameRoom))
     }
   }
 

@@ -1,0 +1,4 @@
+export const GET_GISTS_START = "gists@GET_GISTS_REQUEST"
+export const GET_GISTS_SUCCESS = "gists@GET_GISTS_SUCCESS"
+export const GET_GISTS_FAILURE = "gists@GET_GISTS_FAILURE"
+export const GET_GISTS_CHANGE_VALUE = "gists@GET_GISTS_CHANGE_VALUE"

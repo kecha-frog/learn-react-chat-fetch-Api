@@ -52,16 +52,12 @@ export const MessageList = () => {
       const lastMessageAuthor =
         MessageList[roomId][MessageList[roomId].length - 1].author
 
-      if (
-        lastMessageAuthor !== "Robot" &&
-        MessageList[roomId].length !== 1 &&
-        setTimeoutOn
-      ) {
+      if (lastMessageAuthor !== "Robot" && setTimeoutOn) {
         setTimeoutOn = !setTimeoutOn
         setTimeout(() => {
           sendMessage({
             author: "Robot",
-            message: `Здравствуйте ${lastMessageAuthor}!  Я робот,  не отвечайте мне.`,
+            message: `Здравствуйте ${lastMessageAuthor}!  Я робот комнаты #${roomId},  не отвечайте мне.`,
           })
           setTimeoutOn = !setTimeoutOn
         }, 500)
@@ -121,14 +117,25 @@ export const MessageList = () => {
     )
   }, [handleChangeValue, onKeyPressHandler, sendMessage, value])
 
-  return (
-    <div className={styles.messagesListBox}>
-      <ul className={styles.messagesList}>
-        {messages.map((message, index) => (
-          <Message messages={message} key={index} />
-        ))}
-      </ul>
-      <InputButton />
-    </div>
-  )
+  if (MessageList[roomId]) {
+    return (
+      <div className={styles.messagesListBox}>
+        <ul className={styles.messagesList}>
+          {messages.map((message, index) => (
+            <Message messages={message} key={index} />
+          ))}
+        </ul>
+        <InputButton />
+      </div>
+    )
+  } else {
+    return (
+      <>
+        <div className={styles.messagesListBox}>
+          <h3 className={styles.noMessage}>No message</h3>
+          <InputButton />
+        </div>
+      </>
+    )
+  }
 }

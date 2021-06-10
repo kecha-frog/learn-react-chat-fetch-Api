@@ -2,3 +2,8 @@
     text-decoration: none;
     color: black;
 }
+
+.nameRoomDiv{
+    display: flex;
+    justify-content: space-between;
+}

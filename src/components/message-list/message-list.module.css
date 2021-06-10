@@ -17,3 +17,19 @@
     border-radius: 50%;
     padding: 10px;
 }
+
+.messagesList{
+    overflow: auto;
+    padding: 5px ;
+    height: 700px;
+    list-style-type: none;
+    margin: 0;
+}
+
+.noMessage{
+    height: 700px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    opacity: 30%;
+}

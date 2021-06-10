@@ -43,19 +43,41 @@ const StyledListItemTextMessage = withStyles(() => ({
 
 export const Chat = (props) => {
   const memoSelectorMessageList = useMemo(() => getMessageList(), [])
-  const MessageList = useSelector(memoSelectorMessageList)
+  const messageList = useSelector(memoSelectorMessageList)
 
   const { roomId } = useParams()
 
   const { title } = props
-  const { author, message } = MessageList[title][MessageList[title].length - 1]
+
+  const room = `Room #${title}`
+
+  if (messageList[title] !== undefined) {
+    const { author, message } =
+      messageList[title][messageList[title]?.length - 1]
+
+    return (
+      <>
+        <Link className={styles.link} to={"/chat/" + title}>
+          <StyledListItem button={true} href={"#"} selected={roomId === title}>
+            <div className={styles.nameRoomDiv}>
+              <StyledListItemTextAuthor primary={room} />
+              <StyledListItemTextAuthor primary={author} />
+            </div>
+
+            <StyledListItemTextMessage primary={message} />
+          </StyledListItem>
+        </Link>
+      </>
+    )
+  }
+  const noMessage = `No message`
 
   return (
     <>
       <Link className={styles.link} to={"/chat/" + title}>
         <StyledListItem button={true} href={"#"} selected={roomId === title}>
-          <StyledListItemTextAuthor primary={author} />
-          <StyledListItemTextMessage primary={message} />
+          <StyledListItemTextAuthor primary={room} />
+          <StyledListItemTextMessage primary={noMessage} />
         </StyledListItem>
       </Link>
     </>

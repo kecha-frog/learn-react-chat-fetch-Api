@@ -1,6 +1,6 @@
 import { Chat } from "@components"
 import { List } from "@material-ui/core"
-import { addRoomConversations, getChatList } from "@store/conversations"
+import { addRoomConversations, getChatList } from "@store"
 import { nanoid } from "nanoid"
 import { useSelector, useDispatch } from "react-redux"
 import React, { useMemo } from "react"

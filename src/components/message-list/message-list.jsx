@@ -1,6 +1,7 @@
 import { Message } from "@components"
 import { Input, InputAdornment, withStyles } from "@material-ui/core"
 import { Send } from "@material-ui/icons"
+import { getProfile } from "@store"
 import {
   changeValueConversations,
   getChatValue,
@@ -9,7 +10,7 @@ import {
 import { getMessageList, sendMessages } from "@store/messages"
 import { useSelector, useDispatch } from "react-redux"
 import { useParams } from "react-router-dom"
-import React, { useEffect, useCallback, useMemo } from "react"
+import React, { useCallback, useMemo } from "react"
 import styles from "./message-list.module.css"
 
 const StyledInput = withStyles(() => ({
@@ -21,11 +22,12 @@ const StyledInput = withStyles(() => ({
   },
 }))(Input)
 
-let setTimeoutOn = true // Cделал для ответа робота чтоб много раз не отправлял повторно когда setTimeout скапливается в стеке, его надо в редукс переносить ?
-
 export const MessageList = () => {
   const memoSelectorMessageList = useMemo(() => getMessageList(), [])
   const MessageList = useSelector(memoSelectorMessageList)
+
+  const userNameSelector = useMemo(() => getProfile(), [])
+  const { name } = useSelector(userNameSelector)
 
   const { roomId } = useParams()
 
@@ -34,7 +36,7 @@ export const MessageList = () => {
   const dispatch = useDispatch()
 
   const sendMessage = useCallback(
-    ({ author, message }) => {
+    ({ author = name, message }) => {
       const newMessage = { author, message }
 
       if (!/^\s*$/.test(message) && author !== "Robot") {
@@ -44,26 +46,8 @@ export const MessageList = () => {
         dispatch(sendMessages(roomId, newMessage))
       }
     },
-    [dispatch, roomId],
+    [dispatch, name, roomId],
   )
-
-  useEffect(() => {
-    if (MessageList[roomId] !== undefined) {
-      const lastMessageAuthor =
-        MessageList[roomId][MessageList[roomId].length - 1].author
-
-      if (lastMessageAuthor !== "Robot" && setTimeoutOn) {
-        setTimeoutOn = !setTimeoutOn
-        setTimeout(() => {
-          sendMessage({
-            author: "Robot",
-            message: `Здравствуйте ${lastMessageAuthor}!  Я робот комнаты #${roomId},  не отвечайте мне.`,
-          })
-          setTimeoutOn = !setTimeoutOn
-        }, 500)
-      }
-    }
-  }, [MessageList, roomId, sendMessage])
 
   const memoSelectorValue = useMemo(() => getChatValue(roomId), [roomId])
   const value = useSelector(memoSelectorValue)
@@ -71,7 +55,7 @@ export const MessageList = () => {
   const onKeyPressHandler = React.useCallback(
     ({ code }) => {
       if (code === "Enter") {
-        sendMessage({ author: "User", message: value })
+        sendMessage({ message: value })
       }
     },
     [sendMessage, value],
@@ -104,9 +88,7 @@ export const MessageList = () => {
                 <Send
                   className={styles.icon}
                   type={"button"}
-                  onClick={() =>
-                    sendMessage({ author: "User", message: value })
-                  }
+                  onClick={() => sendMessage({ message: value })}
                   fontSize={"small"}
                 />
               )}

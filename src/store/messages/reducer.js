@@ -2,10 +2,10 @@ import { SEND_MESSAGES } from "@store/messages/type"
 
 const initialState = {
   aaJa: [
-    { author: "User", message: "Привет !" },
+    { author: "Ke4a", message: "Привет !" },
     { author: "Robot", message: "Ау !" },
   ],
-  bF12: [{ author: "User", message: "Привет room2!" }],
+  bF12: [{ author: "Ke4a", message: "Привет room2!" }],
 }
 
 const createReducer = (initialState, handlers) => {

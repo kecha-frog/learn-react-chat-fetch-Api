@@ -14,9 +14,11 @@ export const Chat = () => {
     <>
       <Switch>
         <Route path="/profile">
-          <Profile />
+          <Profile header={<Header />} />
         </Route>
-        <Route path="/gists" component={Gists} />
+        <Route path="/gists">
+          <Gists header={<Header />} />
+        </Route>
         <Route path={["/chat/:roomId", "/chat", "/"]}>
           <Layout
             messageList={<MessageList />}

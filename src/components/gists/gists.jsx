@@ -1,13 +1,16 @@
 import {
+  getAllGists,
   getAllGistsByUserName,
   getGists,
   getGistsSendValue,
-} from "@store/gists"
+} from "@store"
 import debounce from "lodash.debounce"
+import PropTypes from "prop-types"
 import { useDispatch, useSelector } from "react-redux"
 import React, { useEffect, useRef } from "react"
 
-export const Gists = () => {
+export const Gists = (props) => {
+  const { header } = props
   const { gists, error, pending, value } = useSelector(getGists())
   const dispatch = useDispatch()
   const ref = useRef("")
@@ -24,13 +27,14 @@ export const Gists = () => {
 
   return (
     <>
+      {header}
       <h1>Gists</h1>
       <input
         placeholder={"Search..."}
         onChange={(e) => handleChangeValue(e.target.value)}
         type="text"
       />
-      {error ? <h1>{error}</h1> : null}
+      {error && <h1>{error}</h1>}
       {pending && !error ? (
         <h3>Обрабатывается fetch</h3>
       ) : (
@@ -42,4 +46,8 @@ export const Gists = () => {
       )}
     </>
   )
+}
+
+Gists.propTypes = {
+  header: PropTypes.object,
 }
